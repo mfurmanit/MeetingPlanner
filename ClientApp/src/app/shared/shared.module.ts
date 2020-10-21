@@ -30,6 +30,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+
+import * as fromPipes from './pipes/index';
 
 const ANGULAR_MATERIAL = [
   MatAutocompleteModule,
@@ -68,10 +71,17 @@ const ANGULAR_MATERIAL = [
 @NgModule({
   imports: [
     CommonModule,
+    TranslateModule,
     ANGULAR_MATERIAL
   ],
-  exports: [ANGULAR_MATERIAL],
-  declarations: [],
+  exports: [
+    TranslateModule,
+    ANGULAR_MATERIAL,
+    fromPipes.pipes
+  ],
+  declarations: [
+    fromPipes.pipes
+  ],
   entryComponents: [],
   providers: []
 })
