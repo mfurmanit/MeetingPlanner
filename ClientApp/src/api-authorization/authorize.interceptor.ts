@@ -11,8 +11,12 @@ export class AuthorizeInterceptor implements HttpInterceptor {
   constructor(private authorize: AuthorizeService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.authorize.getAccessToken()
-      .pipe(mergeMap(token => this.processRequestWithToken(token, req, next)));
+    if (req.url.includes('i18n')) {
+      return next.handle(req);
+    } else {
+      return this.authorize.getAccessToken()
+        .pipe(mergeMap(token => this.processRequestWithToken(token, req, next)));
+    }
   }
 
   // Checks if there is an access_token available in the authorize service

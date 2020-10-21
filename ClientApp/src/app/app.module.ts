@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -13,6 +13,13 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { SharedModule } from './shared/shared.module';
 import { PlannerModule } from './planner/planner.module';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { AppMissingTranslationHandler } from './shared/helpers/app-missing-translation-handler';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -31,6 +38,10 @@ import { PlannerModule } from './planner/planner.module';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'planner', loadChildren: () => PlannerModule } // canActivate: [AuthorizeGuard]
     ]),
+    TranslateModule.forRoot({
+      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] },
+      missingTranslationHandler: { provide: MissingTranslationHandler, useClass: AppMissingTranslationHandler }
+    }),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

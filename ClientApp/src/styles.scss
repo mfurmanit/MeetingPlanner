@@ -17,3 +17,8 @@ code {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.cal-month-view .cal-header .cal-cell {
+  text-transform: capitalize;
+  padding: 10px 0;
+}

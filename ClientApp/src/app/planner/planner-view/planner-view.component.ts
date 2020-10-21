@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { COLORS, POLISH_MONTHS } from '../../shared/helpers/calendar.helper';
 import { registerLocaleData } from '@angular/common';
-
+import { TranslateService } from '@ngx-translate/core';
 import localePl from '@angular/common/locales/pl';
-registerLocaleData(localePl);
 
+registerLocaleData(localePl);
 @Component({
   selector: 'app-planner-view',
   templateUrl: './planner-view.component.html',
@@ -21,7 +21,7 @@ export class PlannerViewComponent implements OnInit {
   readonly view = 'month';
   readonly weekStartsOn = DAYS_OF_WEEK.MONDAY;
 
-  constructor() {
+  constructor(private translateService: TranslateService) {
   }
 
   ngOnInit(): void {

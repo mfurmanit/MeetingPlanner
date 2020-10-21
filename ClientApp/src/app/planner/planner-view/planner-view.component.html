@@ -6,8 +6,8 @@
             mwlCalendarPreviousView
             [view]="view"
             [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange();">
-      {{ 'Poprzedni' }}
+            (viewDateChange)="viewDateChange()">
+      {{ 'buttons.previous' | translate | capitalize }}
     </button>
   </div>
   <div class="col-md-4 text-center">
@@ -20,8 +20,8 @@
             mwlCalendarNextView
             [view]="view"
             [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange();">
-      {{ 'Następny' }}
+            (viewDateChange)="viewDateChange()">
+      {{ 'buttons.next' | translate | capitalize }}
     </button>
   </div>
 </div>
