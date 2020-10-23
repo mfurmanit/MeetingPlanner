@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace MeetingPlanner.Models
 {
-    public class NotificationUnit
+    public enum NotificationUnit
     {
+        Minutes, Hours, Days, Weeks
     }
 }
