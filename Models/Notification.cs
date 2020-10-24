@@ -8,6 +8,9 @@ namespace MeetingPlanner.Models
 {
     public class Notification
     {
+        [Key]
+        public Guid Id { get; set; } = Guid.NewGuid();
+
         [Required]
         public int Quantity { get; set; }
         

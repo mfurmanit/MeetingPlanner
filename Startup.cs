@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using MeetingPlanner.Data;
+using MeetingPlanner.Repositories;
 using MeetingPlanner.Models;
+using MeetingPlanner.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +42,8 @@ namespace MeetingPlanner
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddScoped<IEventRepository, MockEventRepository>();
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -94,6 +98,8 @@ namespace MeetingPlanner
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+
         }
     }
 }
