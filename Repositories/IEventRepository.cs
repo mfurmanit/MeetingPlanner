@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using MeetingPlanner.Models;
 
 namespace MeetingPlanner.Repositories
 {
@@ -11,7 +9,7 @@ namespace MeetingPlanner.Repositories
         IEnumerable<Event> GetAll(string userId);
         Event GetOneById(string id, bool global);
         void DeleteOneById();
-        void Save(Event eventObject);
-        void Add(Event eventObject);
+        Event Update(Event eventObject);
+        Event Add(Event eventObject);
     }
 }

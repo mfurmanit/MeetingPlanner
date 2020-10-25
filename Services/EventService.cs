@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using AutoMapper;
+using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
 using MeetingPlanner.Others.Exceptions;
 using MeetingPlanner.Repositories;
@@ -10,26 +12,30 @@ namespace MeetingPlanner.Services
 {
     public class EventService
     {
-        private static IEventRepository _repository;
-        private static UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEventRepository _repository;
+        private readonly IMapper _mapper;
 
-        public EventService(IEventRepository repository, UserManager<ApplicationUser> userManager)
+        public EventService(IEventRepository repository, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _repository = repository;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Event> GetAll(ClaimsPrincipal userContext)
+        public IEnumerable<EventResponse> GetAll(ClaimsPrincipal userContext)
         {
-            return _repository.GetAll(_userManager.GetUserId(userContext));
+            var events = _repository.GetAll(_userManager.GetUserId(userContext));
+            return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
-        public IEnumerable<Event> GetAllGlobal()
+        public IEnumerable<EventResponse> GetAllGlobal()
         {
-            return _repository.GetAllGlobal();
+            var events = _repository.GetAllGlobal();
+            return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
-        public Event GetOneById(string id, bool global, ClaimsPrincipal? userContext)
+        public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext)
         {
             var eventObject = _repository.GetOneById(id, global);
 
@@ -43,17 +49,47 @@ namespace MeetingPlanner.Services
             var withUserContext = eventObject.User != null && userContext != null;
             var properUserContext = withUserContext && eventObject.User.Id.Equals(_userManager.GetUserId(userContext));
 
+            var response = _mapper.Map<EventResponse>(eventObject);
+
             if (globalEvent)
             {
-                return eventObject;
+                return response;
             }
 
             if (personalEvent && properUserContext)
             {
-                return eventObject;
+                return response;
             }
 
-            throw new AccessViolationException("Nie posiadasz uprawnień aby wyświetlić wskazane spotkanie!");
+            throw new AccessViolationException("Nie posiadasz uprawnień do wyświetlenia wskazanego spotkania!");
+        }
+
+        public EventResponse Create(EventRequest request, ClaimsPrincipal userContext)
+        {
+            var eventObject = _mapper.Map<Event>(request);
+            var mappedObject = _mapper.Map<Event>(eventObject);
+
+            if (!mappedObject.Global)
+            {
+                mappedObject.User = _userManager.GetUserAsync(userContext).Result;
+            }
+
+            var createdEvent = _repository.Add(mappedObject);
+            return _mapper.Map<EventResponse>(createdEvent);
+        }
+
+        public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext)
+        {
+            var eventObject = _repository.GetOneById(id, request.Global);
+            var mappedObject = _mapper.Map<Event>(eventObject);
+
+            if (!mappedObject.Global)
+            {
+                mappedObject.User = _userManager.GetUserAsync(userContext).Result;
+            }
+
+            var updatedEvent = _repository.Update(mappedObject);
+            return _mapper.Map<EventResponse>(updatedEvent);
         }
     }
 }

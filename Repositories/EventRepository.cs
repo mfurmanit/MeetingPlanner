@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using MeetingPlanner.Data;
+using MeetingPlanner.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingPlanner.Repositories
 {
@@ -25,7 +27,9 @@ namespace MeetingPlanner.Repositories
 
         public Event GetOneById(string id, bool global)
         {
-            return _context.Events.FirstOrDefault(entity => id.Equals(entity.Id.ToString()) && global.Equals(entity.Global));
+            return _context.Events
+                .Include(entity => entity.Notifications)
+                .FirstOrDefault(entity => id.Equals(entity.Id.ToString()) && global.Equals(entity.Global));
         }
 
         public void DeleteOneById()
@@ -33,14 +37,30 @@ namespace MeetingPlanner.Repositories
             throw new NotImplementedException();
         }
 
-        public void Save(Event eventObject)
+        public Event Update(Event eventObject)
         {
-            throw new NotImplementedException();
+            if (eventObject == null)
+            {
+                throw new ArgumentNullException("Przekazany argument nie może być pusty.");
+            }
+
+            _context.Events.Update(eventObject);
+            _context.SaveChanges();
+
+            return eventObject;
         }
 
-        public void Add(Event eventObject)
+        public Event Add(Event eventObject)
         {
-            throw new NotImplementedException();
+            if (eventObject == null)
+            {
+                throw new ArgumentNullException("Przekazany argument nie może być pusty.");
+            }
+
+            _context.Events.Add(eventObject);
+            _context.SaveChanges();
+
+            return eventObject;
         }
     }
 }

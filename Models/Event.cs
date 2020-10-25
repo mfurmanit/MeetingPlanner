@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MeetingPlanner.Models;
+using Newtonsoft.Json;
 
-namespace MeetingPlanner
+namespace MeetingPlanner.Models
 {
     public class Event
     {

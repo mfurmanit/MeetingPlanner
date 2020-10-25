@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MeetingPlanner.Dto;
 using MeetingPlanner.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace MeetingPlanner.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
-        private EventService _service;
+        private readonly EventService _service;
         
         public EventsController(EventService service)
         {
@@ -19,14 +20,14 @@ namespace MeetingPlanner.Controllers
         // GET: api/events
         [Authorize]
         [HttpGet]
-        public IEnumerable<Event> GetAll()
+        public IEnumerable<EventResponse> GetAll()
         {
             return _service.GetAll(this.User);
         }
 
         // GET: api/global-events
-        [HttpGet]
-        public IEnumerable<Event> GetAllGlobal()
+        [HttpGet("global")]
+        public IEnumerable<EventResponse> GetAllGlobal()
         {
             return _service.GetAllGlobal();
         }
@@ -34,28 +35,30 @@ namespace MeetingPlanner.Controllers
         // GET api/events/{id}
         [Authorize]
         [HttpGet("{id}")]
-        public Event Get(string id)
+        public EventResponse Get(string id)
         {
             return _service.GetOneById(id, false, this.User);
         }
 
         // GET api/global-events/{id}
-        [HttpGet("{id}")]
-        public Event GetGlobal(string id)
+        [HttpGet("global/{id}")]
+        public EventResponse GetGlobal(string id)
         {
             return _service.GetOneById(id, true, null);
         }
 
         // POST api/events
         [HttpPost]
-        public void Post([FromBody] string value)
+        public EventResponse Post([FromBody] EventRequest request)
         {
+            return _service.Create(request, this.User);
         }
 
         // PUT api/events/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public EventResponse Put(string id, [FromBody] EventRequest request)
         {
+            return _service.Update(id, request, this.User);
         }
 
         // DELETE api/events/{id}

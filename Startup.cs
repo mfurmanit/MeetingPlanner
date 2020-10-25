@@ -1,3 +1,6 @@
+using System;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,10 +40,15 @@ namespace MeetingPlanner
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
             services.AddRazorPages();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<EventService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -88,16 +96,14 @@ namespace MeetingPlanner
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
-
+            
                 spa.Options.SourcePath = "ClientApp";
-
+            
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-
-
         }
     }
 }
