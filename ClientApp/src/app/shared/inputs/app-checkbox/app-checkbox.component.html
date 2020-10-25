@@ -1,0 +1,39 @@
+<ng-container *ngIf="simple; else standard">
+    <ng-container class="input-counter-group">
+      <mat-checkbox role="checkbox" [id]="controlName" (change)="onChange($event)" [checked]="checked" [disabled]="disabled">
+        {{ placeholderToTranslate | translate | capitalize}}
+      </mat-checkbox>
+      <mat-icon *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltip="{{ tooltip }}">info</mat-icon>
+    </ng-container>
+</ng-container>
+
+<ng-template #standard>
+  <ng-container [formGroup]="form" *ngIf="groupName; else simpleForm">
+    <ng-container [formGroupName]="groupName" class="input-counter-group">
+      <mat-checkbox role="checkbox" [id]="controlName" (change)="onChange($event)"
+                    [required]="required" [checked]="checked" [formControlName]="controlName">
+        {{ placeholderToTranslate | translate | capitalize}}
+      </mat-checkbox>
+      <mat-icon role="tooltip" *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltip="{{ tooltip }}">info</mat-icon>
+      <mat-error role="status" *ngIf="control?.hasError('required')">
+        {{ 'validation.fieldRequired' | translate | capitalize }}
+      </mat-error>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #simpleForm>
+    <ng-container [formGroup]="form" class="input-counter-group">
+      <mat-checkbox role="checkbox" [id]="controlName" (change)="onChange($event)"
+                    [required]="required" [checked]="checked" [formControlName]="controlName">
+        {{ placeholderToTranslate | translate | capitalize}}
+      </mat-checkbox>
+      <mat-icon role="tooltip" *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltip="{{ tooltip }}">info</mat-icon>
+      <mat-error role="status" *ngIf="control?.hasError('required')">
+        {{ 'validation.fieldRequired' | translate | capitalize }}
+      </mat-error>
+    </ng-container>
+  </ng-template>
+</ng-template>
+
+
+

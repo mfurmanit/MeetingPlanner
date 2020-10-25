@@ -1,0 +1,15 @@
+.fields-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  .field {
+    width: 50%;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+
+    &--wider {
+      width: 100%;
+    }
+  }
+}

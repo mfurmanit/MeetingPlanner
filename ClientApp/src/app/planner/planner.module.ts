@@ -4,9 +4,13 @@ import { PlannerViewComponent } from './planner-view/planner-view.component';
 import { CalendarModule } from 'angular-calendar';
 import { SharedModule } from '../shared/shared.module';
 import { PlannerRoutingModule } from './planner-routing.module';
+import { EventDetailsComponent } from './event-details/event-details.component';
 
 @NgModule({
-  declarations: [PlannerViewComponent],
+  declarations: [
+    PlannerViewComponent,
+    EventDetailsComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,

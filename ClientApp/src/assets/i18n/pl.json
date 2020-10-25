@@ -1,6 +1,27 @@
 {
   "buttons": {
     "previous": "poprzedni",
-    "next": "następny"
+    "next": "następny",
+    "add": "dodaj",
+    "save": "zapisz",
+    "cancel": "wróć"
+  },
+  "event": {
+    "title": "tytuł",
+    "description": "opis",
+    "date": "data spotkania",
+    "hourFrom": "godzina rozpoczęcia",
+    "hourTo": "godzina zakończenia",
+    "global": "spotkanie ogólne",
+    "recurring": "spotkanie cykliczne"
+  },
+  "validation": {
+    "fieldRequired": "Pole jest wymagane.",
+    "minLength": "Wprowadzona wartość jest zbyt krótka lub za mała.",
+    "minlength": "Wprowadzona wartość jest zbyt krótka lub za mała.",
+    "matDatepickerMin": "Wprowadzona data jest wcześniejsza niż data minimalna.",
+    "matDatepickerMax": "Wprowadzona data jest późniejsza niż data maksymalna.",
+    "matDatepickerFilter": "Wprowadzona data jest błędna.",
+    "matDatepickerParse": "Wprowadzona data jest błędna."
   }
 }

@@ -1,0 +1,71 @@
+<ng-container [formGroup]="form" *ngIf="groupName; else simpleForm">
+  <mat-form-field style="width: 100%" [formGroupName]="groupName" class="input-counter-group">
+    <ng-container *ngIf="type === inputType; else textArea">
+      <ng-container *ngIf="digitInput; else simpleInput;">
+        <input matInput [placeholder]="placeholderToTranslate | translate | capitalize" [required]="required"
+               [type]="valueType" [id]="controlName" [formControlName]="controlName"
+               [maxLength]="maxLength" [minLength]="minLength" [readonly]="readonly" appDigitOnly>
+      </ng-container>
+      <ng-template #simpleInput>
+        <input matInput [placeholder]="placeholderToTranslate | translate | capitalize" [required]="required"
+               [type]="valueType" [id]="controlName" [formControlName]="controlName"
+               [maxLength]="maxLength" [minLength]="minLength" [readonly]="readonly">
+      </ng-template>
+      <mat-icon *ngIf="tooltip" class="input-tooltip-icon"
+                matTooltipClass="info" matSuffix matTooltip="{{ tooltip }}">info
+      </mat-icon>
+    </ng-container>
+    <ng-template #textArea>
+      <textarea matInput [placeholder]="placeholderToTranslate | translate | capitalize" [required]="required"
+                [type]="valueType" [id]="controlName" [formControlName]="controlName"
+                [maxLength]="maxLength" [minLength]="minLength" [readonly]="readonly" [rows]="rows">
+      </textarea>
+      <mat-icon *ngIf="tooltip" class="input-tooltip-icon"
+                matTooltipClass="info" matTooltip="{{ tooltip }}">info
+      </mat-icon>
+    </ng-template>
+    <span *ngIf="counter >= 0 && !hideCounter" class="text-input-counter">{{ counter }}/{{ maxLength }}</span>
+    <mat-error>
+      <p class="error__message error__message--required"
+         *ngIf="control?.hasError('required')"> {{ 'validation.fieldRequired' | translate | capitalize }} </p>
+      <p class="error__message error__message--required"
+         *ngIf="control?.hasError('minlength') && minLength"> {{ 'validation.minLength' | translate | capitalize }} </p>
+    </mat-error>
+  </mat-form-field>
+</ng-container>
+
+<ng-template #simpleForm>
+  <mat-form-field  [formGroup]="form" class="input-counter-group">
+    <ng-container *ngIf="type === inputType; else textArea">
+      <ng-container *ngIf="digitInput; else simpleInput;">
+        <input matInput [placeholder]="placeholderToTranslate | translate | capitalize" [required]="required"
+               [type]="valueType" [id]="controlName" [formControlName]="controlName"
+               [maxLength]="maxLength" [minLength]="minLength" [readonly]="readonly" appDigitOnly>
+      </ng-container>
+      <ng-template #simpleInput>
+        <input matInput [placeholder]="placeholderToTranslate | translate | capitalize" [required]="required"
+               [type]="valueType" [id]="controlName" [formControlName]="controlName"
+               [maxLength]="maxLength" [minLength]="minLength" [readonly]="readonly">
+      </ng-template>
+      <mat-icon *ngIf="tooltip" class="input-tooltip-icon"
+                matTooltipClass="info" matSuffix matTooltip="{{ tooltip }}">info
+      </mat-icon>
+    </ng-container>
+    <ng-template #textArea>
+      <textarea matInput [placeholder]="placeholderToTranslate | translate | capitalize" [required]="required"
+                [type]="valueType" [id]="controlName" [formControlName]="controlName"
+                [maxLength]="maxLength" [minLength]="minLength" [readonly]="readonly" [rows]="rows">
+      </textarea>
+      <mat-icon *ngIf="tooltip" class="input-tooltip-icon"
+                matTooltipClass="info" matTooltip="{{ tooltip }}">info
+      </mat-icon>
+    </ng-template>
+    <span *ngIf="counter >= 0 && !hideCounter" class="text-input-counter">{{ counter }}/{{ maxLength }}</span>
+    <mat-error>
+      <p class="error__message error__message--required"
+         *ngIf="control?.hasError('required')"> {{ 'validation.fieldRequired' | translate | capitalize }} </p>
+      <p class="error__message error__message--required"
+         *ngIf="control?.hasError('minlength') && minLength"> {{ 'validation.minLength' | translate | capitalize }} </p>
+    </mat-error>
+  </mat-form-field>
+</ng-template>

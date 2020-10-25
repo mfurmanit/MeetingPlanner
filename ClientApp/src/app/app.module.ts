@@ -16,6 +16,7 @@ import { PlannerModule } from './planner/planner.module';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AppMissingTranslationHandler } from './shared/helpers/app-missing-translation-handler';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -49,7 +50,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
   ],
   bootstrap: [AppComponent]
 })

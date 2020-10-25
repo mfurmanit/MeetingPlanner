@@ -1,6 +1,27 @@
 {
   "buttons": {
     "previous": "previous",
-    "next": "next"
+    "next": "next",
+    "add": "add",
+    "save": "save",
+    "cancel": "return"
+  },
+  "event": {
+    "title": "title",
+    "description": "description",
+    "date": "meeting date",
+    "hourFrom": "start time",
+    "hourTo": "end time",
+    "global": "general meeting",
+    "recurring": "recurring meeting"
+  },
+  "validation": {
+    "fieldRequired": "The field is required.",
+    "minLength": "The value entered is too short or too small.",
+    "minlength": "The value entered is too short or too small.",
+    "matDatepickerMin": "The entered date is earlier than the minimum date.",
+    "matDatepickerMax": "The entered date is later than the maximum date.",
+    "matDatepickerFilter": "The entered date is invalid.",
+    "matDatepickerParse": "The entered date is invalid."
   }
 }
