@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MeetingPlanner.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201024171158_InitialSchema")]
-    partial class InitialSchema
+    [Migration("20201025083933_InitializeDatabase")]
+    partial class InitializeDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
