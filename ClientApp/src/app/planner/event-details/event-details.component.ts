@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
 import { InputType } from '../../shared/inputs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isNullOrUndefined } from '../../shared/helpers/application.helper';
 import { Location } from '@angular/common';
+import { EventService } from '../../shared/services/event.service';
+import { Event } from '../../shared/model/event';
+import { SnackBarService } from '../../shared/services';
 
 @Component({
   selector: 'app-event-details',
@@ -14,13 +17,15 @@ import { Location } from '@angular/common';
 export class EventDetailsComponent implements OnInit, OnDestroy {
   isGlobal: boolean = true;
   isEditMode: boolean = false;
-  form: FormGroup = null;
+  form: FormGroup;
   textArea = InputType.TEXTAREA;
   event: Event;
 
   private readonly subscriptions = new Subscription();
 
   constructor(private formBuilder: FormBuilder,
+              private snackBar: SnackBarService,
+              private service: EventService,
               private location: Location,
               private router: Router,
               private route: ActivatedRoute) {
@@ -40,21 +45,38 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  addEvent(form: FormGroup): void {
-    // to implement
+  addEvent(): void {
+    this.checkDataBeforeSave();
+    this.subscriptions.add(this.service.save(this.form.value)
+      .subscribe((event: Event) => {
+        this.router.navigate(event.global ? ['planner/global'] : ['planner/personal']);
+        this.snackBar.openSnackBar(event.global ? 'messages.globalEventAdded' : 'messages.personalEventAdded', true, true);
+      }));
   }
 
-  updateEvent(form: FormGroup): void {
-    // to implement
+  updateEvent(): void {
+    this.checkDataBeforeSave();
+    this.subscriptions.add(this.service.update(this.form.value, this.event.id)
+      .subscribe(event => {
+        this.snackBar.openSnackBar('messages.eventUpdated', true, true);
+      }));
+  }
+
+  private checkDataBeforeSave(): void {
+    if (!this.hasNullValue('hourFrom') || !this.hasNullValue('hourTo')) {
+      this.form.get('withTime').patchValue(true);
+    }
+    this.form.get('global').patchValue(this.isGlobal);
   }
 
   private getEvent(eventId: string): void {
-    // this.subscriptions.add(
-    //   this.service.getOneById(eventId).subscribe(event => {
-    //     this.event = event;
-    //     this.form.patchValue(event);
-    //   })
-    // );
+    const method: Observable<Event> = this.isGlobal ? this.service.getOneGlobalById(eventId) : this.service.getOneById(eventId);
+    this.subscriptions.add(
+      method.subscribe(event => {
+        this.event = event;
+        this.form.patchValue(event);
+      })
+    );
   }
 
   private checkParams(): void {
@@ -75,9 +97,9 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   private initForm(): FormGroup {
     return this.formBuilder.group({
       id: [null],
-      title: [null],
+      title: [null, Validators.required],
       description: [null],
-      date: [null],
+      date: [null, Validators.required],
       hourFrom: [null],
       hourTo: [null],
       withTime: [false],
@@ -85,5 +107,13 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       global: [this.isGlobal],
       notifications: this.formBuilder.array([])
     });
+  }
+
+  private hasNullValue(controlName: string): boolean {
+    return isNullOrUndefined(this.getControlValue(controlName));
+  }
+
+  private getControlValue(controlName: string): any {
+    return this.form && this.form.get(controlName) && this.form.get(controlName).value ? this.form.get(controlName).value : null;
   }
 }

@@ -1,3 +1,5 @@
+import { Notification } from './notification';
+
 export class Event {
   id?: string;
   date?: string | Date;
@@ -8,13 +10,12 @@ export class Event {
   global?: boolean;
   title?: string;
   description?: string;
-  notifications?: any[];
+  notifications?: Notification[];
 
   constructor(obj) {
+    // tslint:disable-next-line:forin
     for (const prop in obj) {
-      if (this[prop]) {
-        this[prop] = obj[prop];
-      }
+      this[prop] = obj[prop];
     }
   }
 }

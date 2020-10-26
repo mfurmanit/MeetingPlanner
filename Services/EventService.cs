@@ -81,7 +81,7 @@ namespace MeetingPlanner.Services
         public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext)
         {
             var eventObject = _repository.GetOneById(id, request.Global);
-            var mappedObject = _mapper.Map<Event>(eventObject);
+            var mappedObject = _mapper.Map(request, eventObject);
 
             if (!mappedObject.Global)
             {

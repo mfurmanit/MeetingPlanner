@@ -23,5 +23,10 @@
     "matDatepickerMax": "Wprowadzona data jest późniejsza niż data maksymalna.",
     "matDatepickerFilter": "Wprowadzona data jest błędna.",
     "matDatepickerParse": "Wprowadzona data jest błędna."
+  },
+  "messages": {
+    "globalEventAdded": "Spotkanie ogólne zostało utworzone i jest widoczne w kalendarzu globalnym.",
+    "personalEventAdded": "Spotkanie prywatne zostało utworzone i jest widoczne w Twoim kalendarzu.",
+    "eventUpdated": "Spotkanie zostało zaktualizowane."
   }
 }

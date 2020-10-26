@@ -23,5 +23,10 @@
     "matDatepickerMax": "The entered date is later than the maximum date.",
     "matDatepickerFilter": "The entered date is invalid.",
     "matDatepickerParse": "The entered date is invalid."
+  },
+  "messages": {
+    "globalEventAdded": "A general appointment has been created and is visible in the global calendar.",
+    "personalEventAdded": "The private appointment has been created and is visible in your calendar.",
+    "eventUpdated": "The appointment has been updated."
   }
 }

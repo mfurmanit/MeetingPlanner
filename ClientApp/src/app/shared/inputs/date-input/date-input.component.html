@@ -11,7 +11,7 @@
     <mat-icon role="tooltip" *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltipClass="info" [matTooltip]=tooltip>info</mat-icon>
 
     <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('required')">
-      {{ 'common.fieldRequired' | translate | capitalize }}
+      {{ 'validation.fieldRequired' | translate | capitalize }}
     </mat-error>
     <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('matDatepickerMin')">
       {{ 'validation.matDatepickerMin' | translate | capitalize }}
@@ -42,7 +42,7 @@
     <mat-icon role="tooltip" *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltipClass="info" [matTooltip]=tooltip>info</mat-icon>
 
     <mat-error *ngIf="form.get(controlName)?.hasError('required')">
-      {{ 'common.fieldRequired' | translate | capitalize }}
+      {{ 'validation.fieldRequired' | translate | capitalize }}
     </mat-error>
     <mat-error *ngIf="form.get(controlName)?.hasError('matDatepickerMin')">
       {{ 'validation.matDatepickerMin' | translate | capitalize }}
