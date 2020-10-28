@@ -7,7 +7,8 @@ import { isNullOrUndefined } from '../../shared/helpers/application.helper';
 import { Location } from '@angular/common';
 import { EventService } from '../../shared/services/event.service';
 import { Event } from '../../shared/model/event';
-import { SnackBarService } from '../../shared/services';
+import { ApplicationService, SnackBarService } from '../../shared/services';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-event-details',
@@ -25,10 +26,13 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
               private snackBar: SnackBarService,
+              private translateService: TranslateService,
+              private appService: ApplicationService,
               private service: EventService,
               private location: Location,
               private router: Router,
               private route: ActivatedRoute) {
+    this.listenForLanguageChange();
   }
 
   ngOnInit() {
@@ -115,5 +119,11 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
 
   private getControlValue(controlName: string): any {
     return this.form && this.form.get(controlName) && this.form.get(controlName).value ? this.form.get(controlName).value : null;
+  }
+
+  private listenForLanguageChange() {
+    this.subscriptions.add(this.appService.appLangState.subscribe(lang => {
+      this.translateService.use(lang);
+    }));
   }
 }

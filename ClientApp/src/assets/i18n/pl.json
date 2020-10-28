@@ -4,7 +4,9 @@
     "next": "następny",
     "add": "dodaj",
     "save": "zapisz",
-    "cancel": "wróć"
+    "cancel": "wróć",
+    "addGlobal": "dodaj spotkanie ogólne",
+    "addPersonal": "dodaj spotkanie prywatne"
   },
   "event": {
     "title": "tytuł",
@@ -28,5 +30,14 @@
     "globalEventAdded": "Spotkanie ogólne zostało utworzone i jest widoczne w kalendarzu globalnym.",
     "personalEventAdded": "Spotkanie prywatne zostało utworzone i jest widoczne w Twoim kalendarzu.",
     "eventUpdated": "Spotkanie zostało zaktualizowane."
+  },
+  "common": {
+    "login": "Zaloguj się",
+    "register": "Rejestracja",
+    "logout": "Wyloguj",
+    "profile": "Profil",
+    "globalEvents": "Spotkania ogólne",
+    "personalEvents": "Spotkania prywatne",
+    "language": "Język"
   }
 }

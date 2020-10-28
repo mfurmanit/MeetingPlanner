@@ -4,7 +4,9 @@
     "next": "next",
     "add": "add",
     "save": "save",
-    "cancel": "return"
+    "cancel": "return",
+    "addGlobal": "add general event",
+    "addPersonal": "add private event"
   },
   "event": {
     "title": "title",
@@ -28,5 +30,14 @@
     "globalEventAdded": "A general appointment has been created and is visible in the global calendar.",
     "personalEventAdded": "The private appointment has been created and is visible in your calendar.",
     "eventUpdated": "The appointment has been updated."
+  },
+  "common": {
+    "login": "Log in",
+    "register": "Registration",
+    "logout": "Log out",
+    "profile": "Profile",
+    "globalEvents": "Global meetings",
+    "personalEvents": "Personal meetings",
+    "language": "Language"
   }
 }

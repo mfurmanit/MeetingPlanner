@@ -1,7 +1,5 @@
 <header>
-  <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
-  >
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">MeetingPlanner</a>
       <button
@@ -11,28 +9,34 @@
         data-target=".navbar-collapse"
         aria-label="Toggle navigation"
         [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
+        (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+           [ngClass]="{ show: isExpanded }">
         <app-login-menu></app-login-menu>
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/planner/global']">
+              {{ 'common.globalEvents' | translate | capitalize }}
+            </a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/planner']"
-              >Planner</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/planner/personal']">
+              {{ 'common.personalEvents' | translate | capitalize }}
+            </a>
           </li>
+          <li class="nav-item" [matMenuTriggerFor]="wcagMenu">
+            <a class="nav-link text-dark">
+              {{ 'common.language' | translate | capitalize }}
+            </a>
+          </li>
+
+          <mat-menu #wcagMenu="matMenu" [overlapTrigger]="false">
+            <button role="button" mat-menu-item (click)="changeLanguage('pl')">PL</button>
+            <button role="button" mat-menu-item (click)="changeLanguage('en')">EN</button>
+            <button role="button" mat-menu-item (click)="changeLanguage('es')">ES</button>
+          </mat-menu>
         </ul>
       </div>
     </div>

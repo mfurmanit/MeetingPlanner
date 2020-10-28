@@ -4,11 +4,14 @@ import { POLISH_MONTHS } from '../../shared/helpers/calendar.helper';
 import { registerLocaleData } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import localePl from '@angular/common/locales/pl';
+import localeEn from '@angular/common/locales/en';
+import localeEs from '@angular/common/locales/es';
 import { endOfDay, isSameDay, isSameMonth, startOfDay, } from 'date-fns';
 import { EventService } from '../../shared/services/event.service';
 import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { Event } from '../../shared/model/event';
+import { ApplicationService } from '../../shared/services';
 
 const colors: any = {
   red: {
@@ -26,6 +29,8 @@ const colors: any = {
 };
 
 registerLocaleData(localePl);
+registerLocaleData(localeEn);
+registerLocaleData(localeEs);
 
 @Component({
   selector: 'app-planner-view',
@@ -71,7 +76,9 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
 
   constructor(private translateService: TranslateService,
               private router: Router,
+              private appService: ApplicationService,
               private service: EventService) {
+    this.listenForLanguageChange();
   }
 
   ngOnInit(): void {
@@ -130,6 +137,13 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
 
   private getCurrentMonthName(): void {
     this.monthName = `${this.monthNames[this.viewDate.getMonth()]} ${this.viewDate.getFullYear()}`;
+  }
+
+  private listenForLanguageChange() {
+    this.subscription.add(this.appService.appLangState.subscribe(lang => {
+      this.translateService.use(lang);
+      this.locale = lang;
+    }));
   }
 
 }

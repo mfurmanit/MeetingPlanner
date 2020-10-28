@@ -17,6 +17,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AppMissingTranslationHandler } from './shared/helpers/app-missing-translation-handler';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ApplicationService } from './shared/services';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -36,7 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     PlannerModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', redirectTo: 'planner/global', pathMatch: 'full' },
       { path: 'planner', loadChildren: () => PlannerModule } // canActivate: [AuthorizeGuard]
     ]),
     TranslateModule.forRoot({
@@ -51,7 +52,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
+    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
+    ApplicationService
   ],
   bootstrap: [AppComponent]
 })

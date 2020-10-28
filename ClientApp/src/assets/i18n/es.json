@@ -1,0 +1,43 @@
+{
+  "buttons": {
+    "previous": "anterior",
+    "next": "siguiente",
+    "add": "añadir",
+    "save": "salvar",
+    "cancel": "vuelve",
+    "addGlobal": "agregar evento general",
+    "addPersonal": "agregar evento privado"
+  },
+  "event": {
+    "title": "título",
+    "description": "descripción",
+    "date": "fecha de la reunión",
+    "hourFrom": "hora de inicio",
+    "hourTo": "hora de finalización",
+    "global": "reunión general",
+    "recurring": "reunión recurrente"
+  },
+  "validation": {
+    "fieldRequired": "El campo es obligatorio.",
+    "minLength": "El valor ingresado es demasiado corto o demasiado pequeño.",
+    "minlength": "El valor ingresado es demasiado corto o demasiado pequeño.",
+    "matDatepickerMin": "La fecha ingresada es anterior a la fecha mínima.",
+    "matDatepickerMax": "La fecha ingresada es posterior a la fecha máxima.",
+    "matDatepickerFilter": "La fecha ingresada es incorrecta.",
+    "matDatepickerParse": "La fecha ingresada es incorrecta."
+  },
+  "messages": {
+    "globalEventAdded": "La cita general se ha creado y está visible en el calendario global.",
+    "personalEventAdded": "La cita privada se ha creado y está visible en su calendario.",
+    "eventUpdated": "La reunión se ha actualizado."
+  },
+  "common": {
+    "login": "Registrarse",
+    "register": "Registro",
+    "logout": "Cerrar sesión",
+    "profile": "Perfil",
+    "globalEvents": "Reuniones generales",
+    "personalEvents": "Reuniones privadas",
+    "language": "Idioma"
+  }
+}

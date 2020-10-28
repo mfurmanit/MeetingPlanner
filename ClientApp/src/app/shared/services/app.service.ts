@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from './snack-bar.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ApplicationService {
   currentAppLang = new BehaviorSubject<string>('pl');
   appLangState = this.currentAppLang.asObservable();
