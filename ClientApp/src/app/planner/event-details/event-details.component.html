@@ -17,8 +17,8 @@
                [placeholderToTranslate]="'event.hourTo'">
     </app-input>
 
-    <app-checkbox class="field" [form]="form" [controlName]="'global'"
-               [placeholderToTranslate]="'event.global'">
+    <app-checkbox *ngIf="!isGlobal" class="field" [form]="form"
+                  [controlName]="'global'" [placeholderToTranslate]="'event.global'">
     </app-checkbox>
 
     <app-checkbox class="field" [form]="form" [controlName]="'recurring'"

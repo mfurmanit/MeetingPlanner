@@ -71,7 +71,9 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
     if (!this.hasNullValue('hourFrom') || !this.hasNullValue('hourTo')) {
       this.form.get('withTime').patchValue(true);
     }
-    this.form.get('global').patchValue(this.isGlobal);
+    if (this.isGlobal) {
+      this.form.get('global').patchValue(true);
+    }
   }
 
   private getEvent(eventId: string): void {
