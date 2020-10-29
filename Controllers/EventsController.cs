@@ -22,7 +22,7 @@ namespace MeetingPlanner.Controllers
         [HttpGet]
         public IEnumerable<EventResponse> GetAll()
         {
-            return _service.GetAll(this.User);
+            return _service.GetAll(HttpContext.User);
         }
 
         // GET: api/global-events
@@ -37,7 +37,7 @@ namespace MeetingPlanner.Controllers
         [HttpGet("{id}")]
         public EventResponse Get(string id)
         {
-            return _service.GetOneById(id, false, this.User);
+            return _service.GetOneById(id, false, HttpContext.User);
         }
 
         // GET api/global-events/{id}
@@ -51,14 +51,14 @@ namespace MeetingPlanner.Controllers
         [HttpPost]
         public EventResponse Post([FromBody] EventRequest request)
         {
-            return _service.Create(request, this.User);
+            return _service.Create(request, HttpContext.User);
         }
 
         // PUT api/events/{id}
         [HttpPut("{id}")]
         public EventResponse Put(string id, [FromBody] EventRequest request)
         {
-            return _service.Update(id, request, this.User);
+            return _service.Update(id, request, HttpContext.User);
         }
 
         // DELETE api/events/{id}

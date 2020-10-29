@@ -24,6 +24,11 @@ const routes: Routes = [
     canActivate: [AuthorizeGuard]
   },
   {
+    path: 'personal/add',
+    component: EventDetailsComponent,
+    canActivate: [AuthorizeGuard]
+  },
+  {
     path: 'personal/:id',
     component: EventDetailsComponent,
     canActivate: [AuthorizeGuard]

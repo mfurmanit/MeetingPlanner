@@ -47,6 +47,7 @@ namespace MeetingPlanner
             services.AddRazorPages();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<EventService>();
+            services.AddScoped<UserService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -6,26 +6,26 @@ using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
 using MeetingPlanner.Others.Exceptions;
 using MeetingPlanner.Repositories;
-using Microsoft.AspNetCore.Identity;
 
 namespace MeetingPlanner.Services
 {
     public class EventService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserService _userService;
         private readonly IEventRepository _repository;
         private readonly IMapper _mapper;
 
-        public EventService(IEventRepository repository, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public EventService(UserService userService, IEventRepository repository, IMapper mapper)
         {
+            _userService = userService;
             _repository = repository;
-            _userManager = userManager;
             _mapper = mapper;
         }
 
         public IEnumerable<EventResponse> GetAll(ClaimsPrincipal userContext)
         {
-            var events = _repository.GetAll(_userManager.GetUserId(userContext));
+            var userId = _userService.GetUserId(userContext);
+            var events = _repository.GetAll(userId);
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
@@ -47,7 +47,7 @@ namespace MeetingPlanner.Services
             var globalEvent = global && eventObject.Global;
             var personalEvent = !globalEvent;
             var withUserContext = eventObject.User != null && userContext != null;
-            var properUserContext = withUserContext && eventObject.User.Id.Equals(_userManager.GetUserId(userContext));
+            var properUserContext = withUserContext && eventObject.User.Id.Equals(_userService.GetUserId(userContext));
 
             var response = _mapper.Map<EventResponse>(eventObject);
 
@@ -71,7 +71,12 @@ namespace MeetingPlanner.Services
 
             if (!mappedObject.Global)
             {
-                mappedObject.User = _userManager.GetUserAsync(userContext).Result;
+                mappedObject.User = _userService.GetUser(userContext);
+            }
+
+            if (!mappedObject.Global && mappedObject.User == null)
+            {
+                throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
             }
 
             var createdEvent = _repository.Add(mappedObject);
@@ -85,7 +90,12 @@ namespace MeetingPlanner.Services
 
             if (!mappedObject.Global)
             {
-                mappedObject.User = _userManager.GetUserAsync(userContext).Result;
+                mappedObject.User = _userService.GetUser(userContext);
+            }
+
+            if (!mappedObject.Global && mappedObject.User == null)
+            {
+                throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
             }
 
             var updatedEvent = _repository.Update(mappedObject);

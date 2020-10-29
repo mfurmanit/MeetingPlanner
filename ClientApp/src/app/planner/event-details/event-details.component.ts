@@ -32,6 +32,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
               private location: Location,
               private router: Router,
               private route: ActivatedRoute) {
+    this.snackBar.translate(translateService);
     this.listenForLanguageChange();
   }
 

@@ -39,5 +39,5 @@
 </mwl-calendar-month-view>
 
 <button class="mt-3" role="button" mat-raised-button color="primary" [routerLink]="['add']">
-  {{ 'buttons.addGlobal'| translate | capitalize }}
+  {{ (isGlobal ? 'buttons.addGlobal' : 'buttons.addPersonal') | translate | capitalize }}
 </button>
