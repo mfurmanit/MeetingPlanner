@@ -41,6 +41,7 @@ namespace MeetingPlanner
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews().AddJsonOptions(options =>
+            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });

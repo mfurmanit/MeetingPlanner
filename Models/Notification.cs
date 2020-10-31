@@ -13,5 +13,7 @@ namespace MeetingPlanner.Models
         
         [Required]
         public NotificationUnit Unit { get; set; }
+
+        public Guid EventId { get; set; }
     }
 }

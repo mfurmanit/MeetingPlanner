@@ -37,7 +37,7 @@ namespace MeetingPlanner.Services
 
         public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext)
         {
-            var eventObject = _repository.GetOneById(id, global);
+            var eventObject = global ? _repository.GetOneById(id, global) : _repository.GetOnePersonal(id);
 
             if (eventObject == null)
             {
@@ -85,7 +85,7 @@ namespace MeetingPlanner.Services
 
         public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext)
         {
-            var eventObject = _repository.GetOneById(id, request.Global);
+            var eventObject = request.Global ? _repository.GetOneById(id, request.Global) : _repository.GetOnePersonal(id);
             var mappedObject = _mapper.Map(request, eventObject);
 
             if (!mappedObject.Global)
