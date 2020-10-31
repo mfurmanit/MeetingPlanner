@@ -1,0 +1,36 @@
+<div class="container w-100 p-15" [formGroup]="formGroup" *ngIf="formGroup">
+
+  <span class="d-inline-flex align-items-center">
+    <mat-icon class="mr-2">alarm</mat-icon>
+    {{'common.notifications' | translate | capitalize}}:
+  </span>
+  <ng-container *ngFor="let notification of notificationsArray.controls">
+
+    <div class="d-flex w-100" [formGroup]="$any(notification)">
+      <span class="d-inline-flex align-items-center mr-2">
+        {{ 'messages.notificationInfoStart' | translate | capitalize }}
+      </span>
+      <app-select-input class="mr-2 w-10" [placeholderToTranslate]="'common.quantity'" [required]="true"
+                        [controlName]="'quantity'" [form]="$any(notification)"
+                        [values]="resolveQuantities($any(notification))">
+      </app-select-input>
+      <app-select-input class="mr-2 w-15" [placeholderToTranslate]="'common.unit'" [required]="true"
+                        [controlName]="'unit'" [form]="$any(notification)"
+                        [values]="units" [customValue]="'value'" [customDisplay]="'key'"
+                        [customDisplayTranslate]="true">
+      </app-select-input>
+      <span class="d-inline-flex align-items-center mr-2">
+        {{ 'messages.notificationInfoEnd' | translate | capitalize }}
+      </span>
+      <span class="d-inline-flex align-items-center cursor-pointer">
+        <mat-icon (click)="deleteNotification($any(notification))">delete</mat-icon>
+      </span>
+    </div>
+  </ng-container>
+
+  <button role="button" mat-raised-button color="primary" class="d-block"
+          (click)="addNotification()" id="addNotificationButton">
+    {{ 'buttons.addNotification'| translate | capitalize }}
+  </button>
+
+</div>

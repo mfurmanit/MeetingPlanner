@@ -1,6 +1,59 @@
 {
   "buttons": {
     "previous": "poprzedni",
-    "next": "następny"
+    "next": "następny",
+    "add": "dodaj",
+    "save": "zapisz",
+    "cancel": "wróć",
+    "addGlobal": "dodaj spotkanie ogólne",
+    "addPersonal": "dodaj spotkanie prywatne",
+    "addNotification": "dodaj powiadomienie"
+  },
+  "event": {
+    "title": "tytuł",
+    "description": "opis",
+    "date": "data spotkania",
+    "hourFrom": "godzina rozpoczęcia",
+    "hourTo": "godzina zakończenia",
+    "global": "spotkanie ogólne",
+    "recurring": "spotkanie cykliczne"
+  },
+  "validation": {
+    "fieldRequired": "Pole jest wymagane.",
+    "minLength": "Wprowadzona wartość jest zbyt krótka lub za mała.",
+    "minlength": "Wprowadzona wartość jest zbyt krótka lub za mała.",
+    "matDatepickerMin": "Wprowadzona data jest wcześniejsza niż data minimalna.",
+    "matDatepickerMax": "Wprowadzona data jest późniejsza niż data maksymalna.",
+    "matDatepickerFilter": "Wprowadzona data jest błędna.",
+    "matDatepickerParse": "Wprowadzona data jest błędna.",
+    "max": "Wybierz poprawną ilość dla wskazanej jednostki."
+  },
+  "messages": {
+    "globalEventAdded": "Spotkanie ogólne zostało utworzone i jest widoczne w kalendarzu globalnym.",
+    "personalEventAdded": "Spotkanie prywatne zostało utworzone i jest widoczne w Twoim kalendarzu.",
+    "eventUpdated": "Spotkanie zostało zaktualizowane.",
+    "notificationAdded": "Powiadomienie zostało dodane do listy. Uzupełnij wymagane pola i zapisz spotkanie aby utrwalić modyfikację.",
+    "notificationDeleted": "Powiadomienie zostało usunięte z listy. Zapisz spotkanie aby utrwalić modyfikację.",
+    "notificationInfoStart": "Powiadomienie e-mail na ",
+    "notificationInfoEnd": " przed spotkaniem."
+  },
+  "common": {
+    "login": "Zaloguj się",
+    "register": "Rejestracja",
+    "logout": "Wyloguj",
+    "profile": "Profil",
+    "globalEvents": "Spotkania ogólne",
+    "personalEvents": "Spotkania prywatne",
+    "language": "Język",
+    "defaultSelectOption": "Wybierz",
+    "unit": "jednostka",
+    "quantity": "ilość",
+    "notifications": "powiadomienia"
+  },
+  "units": {
+    "minutes": "minut",
+    "hours": "godzin",
+    "days": "dni",
+    "weeks": "tygodni"
   }
 }

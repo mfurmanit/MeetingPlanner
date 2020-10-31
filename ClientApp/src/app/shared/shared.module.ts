@@ -30,9 +30,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import * as fromPipes from './pipes/index';
+import * as fromDirectives from './directives/index';
+import * as fromInputs from './inputs/index';
+import * as fromServices from './services/index';
 
 const ANGULAR_MATERIAL = [
   MatAutocompleteModule,
@@ -71,19 +75,27 @@ const ANGULAR_MATERIAL = [
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     TranslateModule,
     ANGULAR_MATERIAL
   ],
   exports: [
     TranslateModule,
+    ReactiveFormsModule,
     ANGULAR_MATERIAL,
-    fromPipes.pipes
+    fromPipes.pipes,
+    fromDirectives.directives,
+    fromInputs.inputs
   ],
   declarations: [
-    fromPipes.pipes
+    fromPipes.pipes,
+    fromDirectives.directives,
+    fromInputs.inputs
   ],
   entryComponents: [],
-  providers: []
+  providers: [
+    fromServices.services
+  ]
 })
 export class SharedModule {
 }

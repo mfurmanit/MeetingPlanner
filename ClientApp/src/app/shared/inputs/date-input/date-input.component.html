@@ -1,0 +1,61 @@
+<ng-container [formGroup]="form" *ngIf="groupName">
+
+  <mat-form-field class="field" [formGroupName]="groupName">
+
+    <input matInput #input [matDatepicker]="picker" [placeholder]="placeholderToTranslate | translate | capitalize"
+           [id]="controlName" [min]="minDate" [max]="maxDate" [formControlName]="controlName" [required]="required"
+    [readonly]="true"/>
+
+    <mat-datepicker-toggle [id]="controlName + 'Toggle'" matPrefix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-icon role="tooltip" *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltipClass="info" [matTooltip]=tooltip>info</mat-icon>
+
+    <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('required')">
+      {{ 'validation.fieldRequired' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('matDatepickerMin')">
+      {{ 'validation.matDatepickerMin' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('matDatepickerMax')">
+      {{ 'validation.matDatepickerMax' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('matDatepickerFilter')">
+      {{ 'validation.matDatepickerFilter' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(groupName).get(controlName)?.hasError('matDatepickerParse')">
+      {{ 'validation.matDatepickerParse' | translate | capitalize }}
+    </mat-error>
+  </mat-form-field>
+
+</ng-container>
+
+<ng-container *ngIf="!groupName" [formGroup]="form">
+
+  <mat-form-field class="field">
+
+    <input matInput #input [matDatepicker]="picker" [placeholder]="placeholderToTranslate | translate | capitalize"
+           [id]="controlName" [min]="minDate" [max]="maxDate" [formControlName]="controlName" [required]="required"
+           [readonly]="true"/>
+
+    <mat-datepicker-toggle [id]="controlName + 'Toggle'" matPrefix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-icon role="tooltip" *ngIf="tooltip" matSuffix class="input-tooltip-icon" matTooltipClass="info" [matTooltip]=tooltip>info</mat-icon>
+
+    <mat-error *ngIf="form.get(controlName)?.hasError('required')">
+      {{ 'validation.fieldRequired' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(controlName)?.hasError('matDatepickerMin')">
+      {{ 'validation.matDatepickerMin' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(controlName)?.hasError('matDatepickerMax')">
+      {{ 'validation.matDatepickerMax' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(controlName)?.hasError('matDatepickerFilter')">
+      {{ 'validation.matDatepickerFilter' | translate | capitalize }}
+    </mat-error>
+    <mat-error *ngIf="form.get(controlName)?.hasError('matDatepickerParse')">
+      {{ 'validation.matDatepickerParse' | translate | capitalize }}
+    </mat-error>
+  </mat-form-field>
+
+</ng-container>

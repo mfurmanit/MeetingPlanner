@@ -1,7 +1,7 @@
 import { CapitalizePipe } from './capitalize.pipe';
 
 export const pipes = [
-  CapitalizePipe,
+  CapitalizePipe
 ];
 
 export * from './capitalize.pipe';

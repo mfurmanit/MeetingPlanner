@@ -1,0 +1,31 @@
+.input-counter-group {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.input-counter-group span {
+  font-size: 12px;
+}
+
+.input-counter-group .text-input-counter {
+  position: absolute;
+  line-height: 12px;
+  right: 0;
+  bottom: -18px;
+}
+
+.mat-icon {
+  font-size: 24px;
+}
+
+.input-tooltip-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+::ng-deep .info {
+  white-space: pre-line;
+}
+

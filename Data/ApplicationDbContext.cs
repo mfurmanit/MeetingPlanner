@@ -17,5 +17,8 @@ namespace MeetingPlanner.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

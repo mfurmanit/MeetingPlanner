@@ -19,6 +19,14 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .cal-month-view .cal-header .cal-cell {
-  text-transform: capitalize;
+  text-transform: uppercase;
   padding: 10px 0;
+}
+
+.cal-event-action > .material-icons {
+  color: white;
+}
+
+button {
+  text-transform: uppercase;
 }

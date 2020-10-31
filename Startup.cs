@@ -1,13 +1,15 @@
+using System;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using MeetingPlanner.Data;
+using MeetingPlanner.Repositories;
 using MeetingPlanner.Models;
+using MeetingPlanner.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,8 +40,18 @@ namespace MeetingPlanner
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(options =>
+            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
             services.AddRazorPages();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<EventService>();
+            services.AddScoped<UserService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -86,9 +98,9 @@ namespace MeetingPlanner
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
-
+            
                 spa.Options.SourcePath = "ClientApp";
-
+            
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");

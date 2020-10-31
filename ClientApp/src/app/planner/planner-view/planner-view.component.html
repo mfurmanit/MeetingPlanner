@@ -1,4 +1,4 @@
-<div class="row calendar-header">
+<div class="row calendar-header mb-3 mt-1">
   <div class="btn-group col-md-4 text-left">
     <button role="button"
             class="btn"
@@ -10,8 +10,10 @@
       {{ 'buttons.previous' | translate | capitalize }}
     </button>
   </div>
-  <div class="col-md-4 text-center">
-    <h3>{{ monthName }}</h3>
+  <div class="col-md-4 text-center m-auto">
+    <h2 class="text-uppercase font-weight-bold m-0">
+      {{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}
+    </h2>
   </div>
   <div class="btn-group col-md-4 text-right">
     <button role="button"
@@ -26,8 +28,16 @@
   </div>
 </div>
 
-<mwl-calendar-month-view [viewDate]="viewDate"
+<mwl-calendar-month-view [refresh]="refresh"
+                         [viewDate]="viewDate"
                          [events]="events"
                          [locale]="locale"
+                         [activeDayIsOpen]="activeDayIsOpen"
+                         (dayClicked)="dayClicked($event.day)"
+                         (eventTimesChanged)="eventTimeChanged($event)"
                          [weekStartsOn]="weekStartsOn">
 </mwl-calendar-month-view>
+
+<button class="mt-3" role="button" mat-raised-button color="primary" [routerLink]="['add']">
+  {{ (isGlobal ? 'buttons.addGlobal' : 'buttons.addPersonal') | translate | capitalize }}
+</button>
