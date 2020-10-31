@@ -1,0 +1,60 @@
+<ng-container *ngIf="form">
+
+  <ng-container [formGroup]="form" *ngIf="groupName; else simpleForm">
+    <mat-form-field [formGroupName]="groupName" class="input-counter-group">
+      <mat-select [multiple]="multiple" [formControlName]="controlName" [id]="controlName"
+                  placeholder="{{ placeholderToTranslate | translate | capitalize }}"
+                  [compareWith]="comparatorFn" [required]="required" (selectionChange)="selectionChanged($event)">
+        <mat-option role="option" [id]="'default'" *ngIf="withDefault" [value]="null" selected>
+          {{ 'common.defaultSelectOption' | translate | capitalize }}
+        </mat-option>
+        <mat-option role="option" *ngFor="let value of values" [value]="customValue ? value[customValue] : value">
+          <span [id]="customDisplay ? value[customDisplay] : value">
+          <ng-container *ngIf="customDisplayFunction !== null; else simpleDisplay">
+            {{ customDisplay ? customDisplayFunction(value[customDisplay]) : customDisplayFunction(value) }}
+          </ng-container>
+          <ng-template #simpleDisplay>
+            {{ customDisplayTranslate ? ((customDisplay ? value[customDisplay] : value) | translate) : (customDisplay ? value[customDisplay] : value) }}
+          </ng-template>
+          </span>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="control?.hasError('required')">
+        {{ 'validation.fieldRequired' | translate | capitalize }}
+      </mat-error>
+      <mat-error *ngIf="control?.hasError('max')">
+        {{ 'validation.max' | translate | capitalize }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-template #simpleForm>
+    <mat-form-field [formGroup]="form" class="input-counter-group">
+      <mat-select [multiple]="multiple" [formControlName]="controlName" [id]="controlName"
+                  placeholder="{{ placeholderToTranslate | translate | capitalize }}"
+                  [compareWith]="comparatorFn" [required]="required"
+                  (selectionChange)="selectionChanged($event)">
+        <mat-option role="option" [id]="'default'" *ngIf="withDefault" [value]="null" selected>
+          {{ 'common.defaultSelectOption' | translate | capitalize }}
+        </mat-option>
+        <mat-option role="option" *ngFor="let value of values" [value]="customValue ? value[customValue] : value">
+            <span [id]="customDisplay ? value[customDisplay] : value">
+          <ng-container *ngIf="customDisplayFunction !== null; else simpleDisplay">
+            {{ customDisplay ? customDisplayFunction(value[customDisplay]) : customDisplayFunction(value) }}
+          </ng-container>
+          <ng-template #simpleDisplay>
+            {{ customDisplayTranslate ? ((customDisplay ? value[customDisplay] : value) | translate) : (customDisplay ? value[customDisplay] : value) }}
+          </ng-template>
+            </span>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="control?.hasError('required')">
+        {{ 'validation.fieldRequired' | translate | capitalize }}
+      </mat-error>
+      <mat-error *ngIf="control?.hasError('max')">
+        {{ 'validation.max' | translate | capitalize }}
+      </mat-error>
+    </mat-form-field>
+  </ng-template>
+
+</ng-container>

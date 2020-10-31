@@ -6,7 +6,8 @@
     "save": "salvar",
     "cancel": "vuelve",
     "addGlobal": "agregar evento general",
-    "addPersonal": "agregar evento privado"
+    "addPersonal": "agregar evento privado",
+    "addNotification": "agregar notificación"
   },
   "event": {
     "title": "título",
@@ -24,12 +25,17 @@
     "matDatepickerMin": "La fecha ingresada es anterior a la fecha mínima.",
     "matDatepickerMax": "La fecha ingresada es posterior a la fecha máxima.",
     "matDatepickerFilter": "La fecha ingresada es incorrecta.",
-    "matDatepickerParse": "La fecha ingresada es incorrecta."
+    "matDatepickerParse": "La fecha ingresada es incorrecta.",
+    "max": "Seleccione la cantidad correcta para la unidad indicada."
   },
   "messages": {
     "globalEventAdded": "La cita general se ha creado y está visible en el calendario global.",
     "personalEventAdded": "La cita privada se ha creado y está visible en su calendario.",
-    "eventUpdated": "La reunión se ha actualizado."
+    "eventUpdated": "La reunión se ha actualizado.",
+    "notificationAdded": "La notificación se ha agregado a la lista. Complete los campos obligatorios y guarde la reunión para que la modificación sea permanente.",
+    "notificationDeleted": "La notificación se ha eliminado de la lista. Guarda la reunión para que la modificación sea permanente.",
+    "notificationInfoStart": "Notificación por correo electrónico activada ",
+    "notificationInfoEnd": " antes de la reunión."
   },
   "common": {
     "login": "Registrarse",
@@ -38,6 +44,16 @@
     "profile": "Perfil",
     "globalEvents": "Reuniones generales",
     "personalEvents": "Reuniones privadas",
-    "language": "Idioma"
+    "language": "Idioma",
+    "defaultSelectOption": "Elegir",
+    "unit": "unidad",
+    "quantity": "cantidad",
+    "notifications": "notificaciones"
+  },
+  "units": {
+    "minutes": "minutos",
+    "hours": "horas",
+    "days": "días",
+    "weeks": "semanas"
   }
 }

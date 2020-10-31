@@ -1,6 +1,10 @@
 import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
 
+export function isEmpty(value: any) {
+  return isNullOrUndefined(value) || _.isEmpty(value);
+}
+
 export function isNullOrUndefined(value: any) {
   return _.isNil(value);
 }

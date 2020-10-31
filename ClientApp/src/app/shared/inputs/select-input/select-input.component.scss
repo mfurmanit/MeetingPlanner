@@ -1,0 +1,30 @@
+input {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.mat-icon {
+  font-size: 28px;
+}
+
+.input-tooltip-icon {
+  position: absolute;
+  right: -30px;
+}
+
+.input-counter-group {
+  display: block;
+  position: relative;
+}
+
+.p-html {
+  margin: 0;
+  max-width: 700px;
+}
+
+.mat-option {
+  word-break: normal;
+  white-space: normal;
+  line-height: initial !important;
+}
+

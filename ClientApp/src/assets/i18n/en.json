@@ -6,7 +6,8 @@
     "save": "save",
     "cancel": "return",
     "addGlobal": "add general event",
-    "addPersonal": "add private event"
+    "addPersonal": "add private event",
+    "addNotification": "add notification"
   },
   "event": {
     "title": "title",
@@ -24,12 +25,17 @@
     "matDatepickerMin": "The entered date is earlier than the minimum date.",
     "matDatepickerMax": "The entered date is later than the maximum date.",
     "matDatepickerFilter": "The entered date is invalid.",
-    "matDatepickerParse": "The entered date is invalid."
+    "matDatepickerParse": "The entered date is invalid.",
+    "max": "Please select the correct quantity for the indicated unit."
   },
   "messages": {
     "globalEventAdded": "A general appointment has been created and is visible in the global calendar.",
     "personalEventAdded": "The private appointment has been created and is visible in your calendar.",
-    "eventUpdated": "The appointment has been updated."
+    "eventUpdated": "The appointment has been updated.",
+    "notificationAdded": "The notification has been added to the list. Fill in the required fields and save the meeting to make the modification permanent.",
+    "notificationDeleted": "The notification has been removed from the list. Save the meeting to make the modification permanent.",
+    "notificationInfoStart": "Email notification on ",
+    "notificationInfoEnd": " before the meeting."
   },
   "common": {
     "login": "Log in",
@@ -38,6 +44,16 @@
     "profile": "Profile",
     "globalEvents": "Global meetings",
     "personalEvents": "Personal meetings",
-    "language": "Language"
+    "language": "Language",
+    "defaultSelectOption": "Choose",
+    "unit": "unit",
+    "quantity": "quantity",
+    "notifications": "notifications"
+  },
+  "units": {
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days",
+    "weeks": "weeks"
   }
 }

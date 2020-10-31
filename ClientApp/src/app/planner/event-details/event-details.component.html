@@ -31,7 +31,11 @@
 
   </div>
 
-  <div class="mt-2">
+  <app-event-notifications *ngIf="!isGlobal"
+                           [event]="event" [formGroup]="form">
+  </app-event-notifications>
+
+  <div class="mt-3">
     <button role="button" mat-raised-button color="primary"
             (click)="isEditMode ? updateEvent() : addEvent()"
             [disabled]="form.invalid" id="saveButton">
