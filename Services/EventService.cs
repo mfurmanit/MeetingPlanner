@@ -9,23 +9,23 @@ using MeetingPlanner.Repositories;
 
 namespace MeetingPlanner.Services
 {
-    public class EventService
+    public class EventService : IEventService
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly IEventRepository _repository;
         private readonly IMapper _mapper;
 
-        public EventService(UserService userService, IEventRepository repository, IMapper mapper)
+        public EventService(IUserService userService, IEventRepository repository, IMapper mapper)
         {
             _userService = userService;
             _repository = repository;
             _mapper = mapper;
         }
 
-        public IEnumerable<EventResponse> GetAll(ClaimsPrincipal userContext)
+        public IEnumerable<EventResponse> GetAllPersonal(ClaimsPrincipal userContext)
         {
             var userId = _userService.GetUserId(userContext);
-            var events = _repository.GetAll(userId);
+            var events = _repository.GetAllPersonal(userId);
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
@@ -37,7 +37,7 @@ namespace MeetingPlanner.Services
 
         public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext)
         {
-            var eventObject = global ? _repository.GetOneById(id, global) : _repository.GetOnePersonal(id);
+            var eventObject = global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
 
             if (eventObject == null)
             {
@@ -85,7 +85,7 @@ namespace MeetingPlanner.Services
 
         public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext)
         {
-            var eventObject = request.Global ? _repository.GetOneById(id, request.Global) : _repository.GetOnePersonal(id);
+            var eventObject = request.Global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
             var mappedObject = _mapper.Map(request, eventObject);
 
             if (!mappedObject.Global)

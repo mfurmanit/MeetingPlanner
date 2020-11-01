@@ -7,12 +7,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using MeetingPlanner.Data;
+using MeetingPlanner.Dto;
 using MeetingPlanner.Repositories;
 using MeetingPlanner.Models;
+using MeetingPlanner.Others.Scheduling;
 using MeetingPlanner.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 
 namespace MeetingPlanner
 {
@@ -25,7 +30,6 @@ namespace MeetingPlanner
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -40,26 +44,43 @@ namespace MeetingPlanner
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-            services.AddControllersWithViews().AddJsonOptions(options =>
             services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
             services.AddRazorPages();
-            services.AddScoped<IEventRepository, EventRepository>();
-            services.AddScoped<EventService>();
-            services.AddScoped<UserService>();
 
+            // DI - Repositories
+            services.AddScoped<IEventRepository, EventRepository>();
+
+            // DI - Services
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<INotificationService, NotificationService>();
+
+            // E-mail connection metadata
+            var connectionMetadata = Configuration.GetSection("ConnectionMetadata").Get<ConnectionMetadata>();
+            services.AddSingleton(connectionMetadata);
+
+            // Quartz services
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddHostedService<QuartzHostedService>();
+
+            // Job and schedule for sending notifications
+            services.AddSingleton<NotificationsJob>();
+            services.AddSingleton(new JobSchedule(
+                typeof(NotificationsJob),
+                "0 * * ? * *")); // run every minute
+
+            // Adding AutoMapper ( ModelMapper from Utils )
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            services.AddSpaStaticFiles(configuration => configuration.RootPath = "ClientApp/dist");
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -96,8 +117,8 @@ namespace MeetingPlanner
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+            // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            // see https://go.microsoft.com/fwlink/?linkid=864501
             
                 spa.Options.SourcePath = "ClientApp";
             

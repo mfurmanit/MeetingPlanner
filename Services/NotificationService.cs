@@ -1,0 +1,109 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using IdentityServer4.Extensions;
+using MeetingPlanner.Data;
+using MeetingPlanner.Models;
+using MeetingPlanner.Others.Utils;
+using MeetingPlanner.Repositories;
+
+namespace MeetingPlanner.Services
+{
+    public class NotificationService : INotificationService
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IEventRepository _eventRepository;
+        private readonly IEmailService _emailService;
+
+        public NotificationService(ApplicationDbContext context, IEventRepository eventRepository,  IEmailService emailService)
+        {
+            _context = context;
+            _eventRepository = eventRepository;
+            _emailService = emailService;
+        }
+
+        public void ResolveAndSendNotifications()
+        {
+            var events = _eventRepository.GetAllWithNotifications().ToList();
+            var notificationsToRemove = new List<Notification>();
+            events.ForEach(eventObject => eventObject.Notifications.ForEach(notification =>
+                CheckAndPrepareNotification(eventObject, notification, notificationsToRemove)));
+            RemoveNotifications(notificationsToRemove);
+        }
+
+        private void CheckAndPrepareNotification(Event eventObject, Notification notification, List<Notification> notificationsToRemove)
+        {
+            var eventDate = eventObject.Date;
+            var withHourFrom = !eventObject.HourFrom.IsNullOrEmpty();
+            var daysUnit = notification.Unit == NotificationUnit.Days;
+            var weeksUnit = notification.Unit == NotificationUnit.Weeks;
+            var daysOrWeeks = daysUnit || weeksUnit;
+
+            if (!withHourFrom && daysOrWeeks)
+            {
+                var quantity = daysUnit ? notification.Quantity : (notification.Quantity * 7);
+                var notificationDate = eventDate.AddDays(-quantity);
+                CheckShortDateAndResolve(eventObject, notification, notificationDate, notificationsToRemove);
+            }
+            else if (withHourFrom)
+            {
+                var time = eventObject.HourFrom.Split(":");
+                var hours = Convert.ToDouble(time[0]);
+                var minutes = Convert.ToDouble(time[1]);
+                var eventDateAndTime = eventDate.AddHours(hours).AddMinutes(minutes);
+                var notificationDate = ResolveNotificationDate(notification, eventDateAndTime);
+                CheckFullDateAndResolve(eventObject, notification, notificationDate, notificationsToRemove);
+            }
+        }
+
+        private void CheckShortDateAndResolve(Event eventObject, Notification notification,
+            DateTime notificationDate, List<Notification> toRemove)
+        {
+            if (notificationDate.ToShortDateString() == DateTime.Today.ToShortDateString())
+            {
+                toRemove.Add(notification);
+                _emailService.SendNotification(eventObject);
+                Debug.WriteLine("Should send notification ...");
+            }
+        }
+
+        private void CheckFullDateAndResolve(Event eventObject, Notification notification,
+            DateTime notificationDate, List<Notification> toRemove)
+        {
+            if (notificationDate.Equals(DateUtils.CurrentDate()))
+            {
+                toRemove.Add(notification);
+                _emailService.SendNotification(eventObject);
+                Debug.WriteLine("Should send notification ...");
+            }
+        }
+
+        private void RemoveNotifications(List<Notification> toRemove)
+        {
+            if (!toRemove.IsNullOrEmpty())
+            {
+                _context.Notifications.RemoveRange(toRemove);
+                _context.SaveChanges();
+            }
+        }
+
+        private DateTime ResolveNotificationDate(Notification notification, DateTime dateTime)
+        {
+            switch (notification.Unit)
+            {
+                case NotificationUnit.Minutes:
+                    return dateTime.AddMinutes(-notification.Quantity);
+                case NotificationUnit.Hours:
+                    return dateTime.AddHours(-notification.Quantity);
+                case NotificationUnit.Days:
+                    return dateTime.AddDays(-notification.Quantity);
+                case NotificationUnit.Weeks:
+                    return dateTime.AddDays(-(notification.Quantity * 7));
+                default:
+                    throw new InvalidEnumArgumentException("Wskazana jednostka powiadomienia nie istnieje!");
+            }
+        }
+    }
+}

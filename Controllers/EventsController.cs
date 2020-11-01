@@ -10,9 +10,9 @@ namespace MeetingPlanner.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
-        private readonly EventService _service;
+        private readonly IEventService _service;
         
-        public EventsController(EventService service)
+        public EventsController(IEventService service)
         {
             _service = service;
         }
@@ -22,7 +22,7 @@ namespace MeetingPlanner.Controllers
         [HttpGet]
         public IEnumerable<EventResponse> GetAll()
         {
-            return _service.GetAll(HttpContext.User);
+            return _service.GetAllPersonal(HttpContext.User);
         }
 
         // GET: api/global-events
