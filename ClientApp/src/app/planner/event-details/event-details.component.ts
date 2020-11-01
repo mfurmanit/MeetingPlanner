@@ -68,9 +68,6 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   }
 
   private checkDataBeforeSave(): void {
-    if (!this.hasNullValue('hourFrom') || !this.hasNullValue('hourTo')) {
-      this.form.get('withTime').patchValue(true);
-    }
     if (this.isGlobal) {
       this.form.get('global').patchValue(true);
     }
@@ -109,8 +106,6 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       date: [null, Validators.required],
       hourFrom: [null],
       hourTo: [null],
-      withTime: [false],
-      recurring: [false],
       global: [this.isGlobal],
       notifications: this.formBuilder.array([])
     });

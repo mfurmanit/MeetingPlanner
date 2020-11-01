@@ -5,8 +5,6 @@ export class Event {
   date?: string | Date;
   hourFrom?: string;
   hourTo?: string;
-  withTime?: boolean;
-  recurring?: boolean;
   global?: boolean;
   title?: string;
   description?: string;

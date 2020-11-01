@@ -123,7 +123,7 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
         title: apiEvent.title,
         color: colors.red,
         actions: this.actions,
-        allDay: !apiEvent.withTime,
+        // allDay: !apiEvent.withTime,
         resizable: {
           beforeStart: true,
           afterEnd: true,

@@ -14,8 +14,6 @@ namespace MeetingPlanner.Models
         public DateTime Date { get; set; }
         public string HourFrom { get; set; }
         public string HourTo { get; set; }
-        public bool WithTime { get; set; } = true;
-        public bool Recurring { get; set; } = false;
         public bool Global { get; set; } = true;
         
         [Required]

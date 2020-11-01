@@ -15,8 +15,7 @@
     "date": "data spotkania",
     "hourFrom": "godzina rozpoczęcia",
     "hourTo": "godzina zakończenia",
-    "global": "spotkanie ogólne",
-    "recurring": "spotkanie cykliczne"
+    "global": "spotkanie ogólne"
   },
   "validation": {
     "fieldRequired": "Pole jest wymagane.",

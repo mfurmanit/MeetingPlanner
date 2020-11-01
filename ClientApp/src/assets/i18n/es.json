@@ -15,8 +15,7 @@
     "date": "fecha de la reunión",
     "hourFrom": "hora de inicio",
     "hourTo": "hora de finalización",
-    "global": "reunión general",
-    "recurring": "reunión recurrente"
+    "global": "reunión general"
   },
   "validation": {
     "fieldRequired": "El campo es obligatorio.",

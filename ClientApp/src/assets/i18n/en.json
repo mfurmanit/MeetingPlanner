@@ -15,8 +15,7 @@
     "date": "meeting date",
     "hourFrom": "start time",
     "hourTo": "end time",
-    "global": "general meeting",
-    "recurring": "recurring meeting"
+    "global": "general meeting"
   },
   "validation": {
     "fieldRequired": "The field is required.",
