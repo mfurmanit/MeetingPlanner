@@ -21,6 +21,10 @@ export class EventService {
     return this.http.put<Event>(`${this.eventsUrl}/${id}`, event);
   }
 
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.eventsUrl}/${id}`);
+  }
+
   getOneById(id: string): Observable<Event> {
     return this.http.get(`${this.eventsUrl}/${id}`)
       .pipe(map(res => new Event(res)));
@@ -38,7 +42,7 @@ export class EventService {
       );
   }
 
-  getAll(): Observable<Event[]> {
+  getAllPersonal(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.eventsUrl}`)
       .pipe(
         map((res: Event[]) => res.map(event => new Event(event)))

@@ -6,7 +6,7 @@
     </app-input>
 
     <app-date-input class="field" [form]="form" [controlName]="'date'" [required]="true"
-                    [placeholderToTranslate]="'event.date'">
+                    [placeholderToTranslate]="'event.date'" [minDate]="minDate">
     </app-date-input>
 
     <app-time-input class="field" [form]="form"
@@ -20,7 +20,7 @@
                     [controlName]="'hourTo'">
     </app-time-input>
 
-    <app-checkbox *ngIf="!isGlobal" class="field" [form]="form"
+    <app-checkbox *ngIf="!isGlobal" class="field" [form]="form" (isChecked)="onGlobalChange($event)"
                   [controlName]="'global'" [placeholderToTranslate]="'event.global'">
     </app-checkbox>
 
@@ -30,7 +30,7 @@
 
   </div>
 
-  <app-event-notifications *ngIf="!isGlobal"
+  <app-event-notifications *ngIf="!isGlobal && !form?.get('global').value"
                            [event]="event" [formGroup]="form">
   </app-event-notifications>
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading;
 using AutoMapper;
 using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
@@ -93,8 +94,28 @@ namespace MeetingPlanner.Services
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
 
-            var eventObject = request.Global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
-            var mappedObject = _mapper.Map(request, eventObject);
+            var dbEvent = _repository.GetOne(id);
+            var mappedObject = new Event();
+            var stateChanged = false;
+
+            if (dbEvent.Global && !request.Global)
+            {
+                throw new ArgumentException("Nie można zmienić wydarzenia ogólnego na prywatne!");
+            }
+
+            if (!dbEvent.Global && request.Global) // Changing personal event to global event
+            {
+                dbEvent = _repository.GetOnePersonal(id);
+                mappedObject = _mapper.Map(request, dbEvent);
+                mappedObject.Notifications = new List<Notification>();
+                mappedObject.User = null;
+                mappedObject.UserId = null;
+                stateChanged = true;
+            } else if ((dbEvent.Global && request.Global) || (!dbEvent.Global && !request.Global)) // Update global / personal event normally
+            {
+                dbEvent = request.Global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
+                mappedObject = _mapper.Map(request, dbEvent);
+            }
 
             if (!mappedObject.Global)
             {
@@ -106,8 +127,14 @@ namespace MeetingPlanner.Services
                 throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
             }
 
-            var updatedEvent = _repository.Update(mappedObject);
+            var updatedEvent = _repository.Update(mappedObject, stateChanged);
             return _mapper.Map<EventResponse>(updatedEvent);
+        }
+
+        public void Delete(string id)
+        {
+            var dbEvent = _repository.GetOneWithNotifications(id);
+            _repository.Delete(dbEvent);
         }
     }
 }

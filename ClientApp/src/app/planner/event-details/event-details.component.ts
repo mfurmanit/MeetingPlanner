@@ -21,6 +21,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   textArea = InputType.TEXTAREA;
   event: Event;
+  minDate: Date = new Date();
 
   private readonly subscriptions = new Subscription();
 
@@ -67,8 +68,19 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       }));
   }
 
+  onGlobalChange(checked: boolean) {
+    if (checked) {
+      this.form.removeControl('notifications');
+    } else {
+      this.form.addControl('notifications', this.formBuilder.array([]));
+    }
+  }
+
   private checkDataBeforeSave(): void {
-    if (this.isGlobal) this.form.get('global').patchValue(true);
+    if (this.isGlobal || this.form.get('global').value === true) {
+      this.form.get('global').patchValue(true);
+      this.form.removeControl('notifications');
+    }
   }
 
   private getEvent(eventId: string): void {

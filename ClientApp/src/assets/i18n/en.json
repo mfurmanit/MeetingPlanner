@@ -9,7 +9,8 @@
     "addPersonal": "add private event",
     "addNotification": "add notification",
     "choose": "choose",
-    "close": "close"
+    "close": "close",
+    "confirm": "confirm"
   },
   "event": {
     "title": "title",
@@ -37,7 +38,10 @@
     "notificationDeleted": "The notification has been removed from the list. Save the meeting to make the modification permanent.",
     "notificationInfoStart": "Email notification on ",
     "notificationInfoEnd": " before the meeting.",
-    "unitsInfo": "Minutes and times (as units) are only available for selection after entering a meeting start date."
+    "unitsInfo": "Minutes and times (as units) are only available for selection after entering a meeting start date.",
+    "eventDeletionHeader": "Deleting an appointment",
+    "eventDeletionContent": "This operation is irreversible. Are you sure you want to delete the selected meeting?",
+    "eventDeleted": "The appointment has been deleted."
   },
   "common": {
     "login": "Log in",

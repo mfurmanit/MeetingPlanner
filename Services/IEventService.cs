@@ -12,5 +12,6 @@ namespace MeetingPlanner.Services
         public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext);
         public EventResponse Create(EventRequest request, ClaimsPrincipal userContext);
         public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext);
+        void Delete(string id);
     }
 }
