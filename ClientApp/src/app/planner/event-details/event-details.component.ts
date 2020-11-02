@@ -62,15 +62,13 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   updateEvent(): void {
     this.checkDataBeforeSave();
     this.subscriptions.add(this.service.update(this.form.value, this.event.id)
-      .subscribe(event => {
+      .subscribe(() => {
         this.snackBar.openSnackBar('messages.eventUpdated', true, true);
       }));
   }
 
   private checkDataBeforeSave(): void {
-    if (this.isGlobal) {
-      this.form.get('global').patchValue(true);
-    }
+    if (this.isGlobal) this.form.get('global').patchValue(true);
   }
 
   private getEvent(eventId: string): void {

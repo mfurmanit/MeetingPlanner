@@ -62,9 +62,9 @@ namespace MeetingPlanner.Controllers
         }
 
         // DELETE api/events/{id}
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        // [HttpDelete("{id}")]
+        // public void Delete(int id)
+        // {
+        // }
     }
 }

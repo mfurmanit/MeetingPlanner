@@ -91,19 +91,14 @@ namespace MeetingPlanner.Services
 
         private DateTime ResolveNotificationDate(Notification notification, DateTime dateTime)
         {
-            switch (notification.Unit)
+            return notification.Unit switch
             {
-                case NotificationUnit.Minutes:
-                    return dateTime.AddMinutes(-notification.Quantity);
-                case NotificationUnit.Hours:
-                    return dateTime.AddHours(-notification.Quantity);
-                case NotificationUnit.Days:
-                    return dateTime.AddDays(-notification.Quantity);
-                case NotificationUnit.Weeks:
-                    return dateTime.AddDays(-(notification.Quantity * 7));
-                default:
-                    throw new InvalidEnumArgumentException("Wskazana jednostka powiadomienia nie istnieje!");
-            }
+                NotificationUnit.Minutes => dateTime.AddMinutes(-notification.Quantity),
+                NotificationUnit.Hours => dateTime.AddHours(-notification.Quantity),
+                NotificationUnit.Days => dateTime.AddDays(-notification.Quantity),
+                NotificationUnit.Weeks => dateTime.AddDays(-(notification.Quantity * 7)),
+                _ => throw new InvalidEnumArgumentException("Wskazana jednostka powiadomienia nie istnieje!")
+            };
         }
     }
 }

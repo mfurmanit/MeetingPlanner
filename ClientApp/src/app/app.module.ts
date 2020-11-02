@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -18,6 +18,7 @@ import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ng
 import { AppMissingTranslationHandler } from './shared/helpers/app-missing-translation-handler';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ApplicationService } from './shared/services';
+import { ErrorsHandler } from './shared/others/errors-handler';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,6 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
+    { provide: ErrorHandler, useClass: ErrorsHandler },
     ApplicationService
   ],
   bootstrap: [AppComponent]

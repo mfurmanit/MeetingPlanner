@@ -37,6 +37,7 @@ import * as fromPipes from './pipes/index';
 import * as fromDirectives from './directives/index';
 import * as fromInputs from './inputs/index';
 import * as fromServices from './services/index';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const ANGULAR_MATERIAL = [
   MatAutocompleteModule,
@@ -77,12 +78,14 @@ const ANGULAR_MATERIAL = [
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    ANGULAR_MATERIAL
+    ANGULAR_MATERIAL,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     TranslateModule,
     ReactiveFormsModule,
     ANGULAR_MATERIAL,
+    NgxMaterialTimepickerModule,
     fromPipes.pipes,
     fromDirectives.directives,
     fromInputs.inputs

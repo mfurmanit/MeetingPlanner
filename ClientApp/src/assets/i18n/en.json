@@ -7,7 +7,9 @@
     "cancel": "return",
     "addGlobal": "add general event",
     "addPersonal": "add private event",
-    "addNotification": "add notification"
+    "addNotification": "add notification",
+    "choose": "choose",
+    "close": "close"
   },
   "event": {
     "title": "title",

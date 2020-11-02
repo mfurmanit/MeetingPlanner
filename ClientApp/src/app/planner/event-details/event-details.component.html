@@ -9,13 +9,16 @@
                     [placeholderToTranslate]="'event.date'">
     </app-date-input>
 
-    <app-input class="field" [form]="form" [controlName]="'hourFrom'"
-               [placeholderToTranslate]="'event.hourFrom'">
-    </app-input>
+    <app-time-input class="field" [form]="form"
+                    placeholder="{{ 'event.hourFrom' | translate | capitalize }}"
+                    [controlName]="'hourFrom'">
+    </app-time-input>
 
-    <app-input class="field" [form]="form" [controlName]="'hourTo'"
-               [placeholderToTranslate]="'event.hourTo'">
-    </app-input>
+    <app-time-input *ngIf="form?.get('hourFrom').value"
+                    class="field" [form]="form"
+                    placeholder="{{ 'event.hourTo' | translate | capitalize }}"
+                    [controlName]="'hourTo'">
+    </app-time-input>
 
     <app-checkbox *ngIf="!isGlobal" class="field" [form]="form"
                   [controlName]="'global'" [placeholderToTranslate]="'event.global'">

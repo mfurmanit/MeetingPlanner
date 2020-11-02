@@ -19,7 +19,7 @@ export class SnackBarService {
     const snackBarRef = this.snackBar.open(
       translate ? this.translateService.instant(message) : message,
       !autoClose ? this.translateService.instant('common.close') : null,
-      autoClose ? { duration: 5000 } : null
+      autoClose ? { duration: 5000, verticalPosition: 'bottom', horizontalPosition: 'center' } : null
     );
     this.liveAnnouncer.announce(translate ? this.translateService.instant(message) : message).then(() => null);
     snackBarRef.onAction().subscribe(() => snackBarRef.dismiss());

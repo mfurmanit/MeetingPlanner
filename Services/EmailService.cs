@@ -58,15 +58,13 @@ namespace MeetingPlanner.Services
         public void SendNotification(Event eventObject)
         {
             var mimeMessage = CreateMimeMessageFromEmailMessage(PrepareEmailMessage(eventObject));
-            using (SmtpClient smtpClient = new SmtpClient())
-            {
-                smtpClient.Connect(_connectionMetadata.SmtpServer,
-                    _connectionMetadata.Port, true);
-                smtpClient.Authenticate(_connectionMetadata.Username,
-                    _connectionMetadata.Password);
-                smtpClient.Send(mimeMessage);
-                smtpClient.Disconnect(true);
-            }
+            using SmtpClient smtpClient = new SmtpClient();
+            smtpClient.Connect(_connectionMetadata.SmtpServer,
+                _connectionMetadata.Port, true);
+            smtpClient.Authenticate(_connectionMetadata.Username,
+                _connectionMetadata.Password);
+            smtpClient.Send(mimeMessage);
+            smtpClient.Disconnect(true);
         }
     }
 }

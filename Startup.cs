@@ -10,11 +10,13 @@ using MeetingPlanner.Data;
 using MeetingPlanner.Dto;
 using MeetingPlanner.Repositories;
 using MeetingPlanner.Models;
+using MeetingPlanner.Others.Exceptions;
 using MeetingPlanner.Others.Scheduling;
 using MeetingPlanner.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -39,15 +41,12 @@ namespace MeetingPlanner
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            services.AddIdentityServer().AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
-            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
+            services.AddAuthentication().AddIdentityServerJwt();
+
+            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options => 
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddRazorPages();
 
             // DI - Repositories
@@ -81,32 +80,33 @@ namespace MeetingPlanner
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "ClientApp/dist");
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Logging file
+            var loggingFilePath = Configuration.GetSection("LoggingFilePath").Get<string>();
+            loggerFactory.AddFile(loggingFilePath);
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.ConfigureCustomExceptionMiddleware();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.ConfigureCustomExceptionMiddleware();
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             if (!env.IsDevelopment())
-            {
                 app.UseSpaStaticFiles();
-            }
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -117,15 +117,10 @@ namespace MeetingPlanner
 
             app.UseSpa(spa =>
             {
-            // To learn more about options for serving an Angular SPA from ASP.NET Core,
-            // see https://go.microsoft.com/fwlink/?linkid=864501
-            
                 spa.Options.SourcePath = "ClientApp";
             
                 if (env.IsDevelopment())
-                {
                     spa.UseAngularCliServer(npmScript: "start");
-                }
             });
         }
     }

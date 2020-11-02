@@ -7,7 +7,9 @@
     "cancel": "vuelve",
     "addGlobal": "agregar evento general",
     "addPersonal": "agregar evento privado",
-    "addNotification": "agregar notificación"
+    "addNotification": "agregar notificación",
+    "choose": "elegir",
+    "close": "cerca"
   },
   "event": {
     "title": "título",

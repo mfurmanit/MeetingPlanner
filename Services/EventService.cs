@@ -5,6 +5,7 @@ using AutoMapper;
 using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
 using MeetingPlanner.Others.Exceptions;
+using MeetingPlanner.Others.Utils;
 using MeetingPlanner.Repositories;
 
 namespace MeetingPlanner.Services
@@ -35,6 +36,7 @@ namespace MeetingPlanner.Services
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
+        #nullable enable
         public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext)
         {
             var eventObject = global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
@@ -46,8 +48,6 @@ namespace MeetingPlanner.Services
 
             var globalEvent = global && eventObject.Global;
             var personalEvent = !globalEvent;
-            var withUserContext = eventObject.User != null && userContext != null;
-            var properUserContext = withUserContext && eventObject.User.Id.Equals(_userService.GetUserId(userContext));
 
             var response = _mapper.Map<EventResponse>(eventObject);
 
@@ -55,6 +55,8 @@ namespace MeetingPlanner.Services
             {
                 return response;
             }
+
+            var properUserContext = userContext != null && eventObject.User.Id.Equals(_userService.GetUserId(userContext));
 
             if (personalEvent && properUserContext)
             {
@@ -66,6 +68,9 @@ namespace MeetingPlanner.Services
 
         public EventResponse Create(EventRequest request, ClaimsPrincipal userContext)
         {
+            TimeUtils.ValidateHourFormat(request.HourFrom);
+            TimeUtils.ValidateHourFormat(request.HourTo);
+
             var eventObject = _mapper.Map<Event>(request);
             var mappedObject = _mapper.Map<Event>(eventObject);
 
@@ -85,6 +90,9 @@ namespace MeetingPlanner.Services
 
         public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext)
         {
+            TimeUtils.ValidateHourFormat(request.HourFrom);
+            TimeUtils.ValidateHourFormat(request.HourTo);
+
             var eventObject = request.Global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
             var mappedObject = _mapper.Map(request, eventObject);
 

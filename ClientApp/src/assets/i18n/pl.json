@@ -7,7 +7,9 @@
     "cancel": "wróć",
     "addGlobal": "dodaj spotkanie ogólne",
     "addPersonal": "dodaj spotkanie prywatne",
-    "addNotification": "dodaj powiadomienie"
+    "addNotification": "dodaj powiadomienie",
+    "choose": "wybierz",
+    "close": "zamknij"
   },
   "event": {
     "title": "tytuł",
