@@ -36,7 +36,8 @@
     "notificationAdded": "The notification has been added to the list. Fill in the required fields and save the meeting to make the modification permanent.",
     "notificationDeleted": "The notification has been removed from the list. Save the meeting to make the modification permanent.",
     "notificationInfoStart": "Email notification on ",
-    "notificationInfoEnd": " before the meeting."
+    "notificationInfoEnd": " before the meeting.",
+    "unitsInfo": "Minutes and times (as units) are only available for selection after entering a meeting start date."
   },
   "common": {
     "login": "Log in",

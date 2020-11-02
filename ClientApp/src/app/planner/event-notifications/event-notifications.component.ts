@@ -17,7 +17,10 @@ export class EventNotificationsComponent implements OnInit, OnDestroy, OnChanges
 
   @Input() event: Event;
   @Input() formGroup: FormGroup;
+
   units: NotificationUnitLabel[];
+  filteredUnits: NotificationUnitLabel[];
+
   private readonly subscriptions = new Subscription();
 
   constructor(private formBuilder: FormBuilder,
@@ -78,6 +81,8 @@ export class EventNotificationsComponent implements OnInit, OnDestroy, OnChanges
       value: unit,
       key: `units.${unit.toString().toLowerCase()}`
     }));
+    this.filteredUnits = this.units.filter(unit =>
+      unit.value === NotificationUnit.Days || unit.value === NotificationUnit.Weeks);
   }
 
   private initNotifications(): void {

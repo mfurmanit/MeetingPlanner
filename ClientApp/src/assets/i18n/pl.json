@@ -36,7 +36,8 @@
     "notificationAdded": "Powiadomienie zostało dodane do listy. Uzupełnij wymagane pola i zapisz spotkanie aby utrwalić modyfikację.",
     "notificationDeleted": "Powiadomienie zostało usunięte z listy. Zapisz spotkanie aby utrwalić modyfikację.",
     "notificationInfoStart": "Powiadomienie e-mail na ",
-    "notificationInfoEnd": " przed spotkaniem."
+    "notificationInfoEnd": " przed spotkaniem.",
+    "unitsInfo": "Minuty i godziny (jako jednostki) są dostępne do wyboru wyłącznie po wprowadzeniu daty rozpoczęcia spotkania."
   },
   "common": {
     "login": "Zaloguj się",

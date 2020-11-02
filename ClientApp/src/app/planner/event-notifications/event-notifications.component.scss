@@ -19,3 +19,9 @@
   border-radius: 4px;
   margin-top: 10px;
 }
+
+::ng-deep .mat-tooltip {
+  font-size: 1rem;
+  padding: 12px !important;
+  max-width: none !important;
+}

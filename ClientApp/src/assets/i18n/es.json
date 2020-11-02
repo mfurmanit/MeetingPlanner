@@ -36,7 +36,8 @@
     "notificationAdded": "La notificación se ha agregado a la lista. Complete los campos obligatorios y guarde la reunión para que la modificación sea permanente.",
     "notificationDeleted": "La notificación se ha eliminado de la lista. Guarda la reunión para que la modificación sea permanente.",
     "notificationInfoStart": "Notificación por correo electrónico activada ",
-    "notificationInfoEnd": " antes de la reunión."
+    "notificationInfoEnd": " antes de la reunión.",
+    "unitsInfo": "Los minutos y las horas (como unidades) solo se pueden seleccionar después de ingresar la fecha de inicio de la reunión."
   },
   "common": {
     "login": "Registrarse",

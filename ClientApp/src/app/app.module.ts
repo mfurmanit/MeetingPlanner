@@ -39,7 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PlannerModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'planner/global', pathMatch: 'full' },
-      { path: 'planner', loadChildren: () => PlannerModule } // canActivate: [AuthorizeGuard]
+      { path: 'planner', loadChildren: () => PlannerModule }
     ]),
     TranslateModule.forRoot({
       loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] },
