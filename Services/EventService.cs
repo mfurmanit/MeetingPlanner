@@ -71,6 +71,7 @@ namespace MeetingPlanner.Services
         {
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
+            DateUtils.ValidateEventDate(request.Date);
 
             var eventObject = _mapper.Map<Event>(request);
             var mappedObject = _mapper.Map<Event>(eventObject);
@@ -93,6 +94,7 @@ namespace MeetingPlanner.Services
         {
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
+            DateUtils.ValidateEventDate(request.Date);
 
             var dbEvent = _repository.GetOne(id);
             var mappedObject = new Event();

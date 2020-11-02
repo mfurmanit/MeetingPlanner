@@ -12,7 +12,27 @@ namespace MeetingPlanner.Others.Utils
                 dateTime.Minute, 0, 0, dateTime.Kind);
         }
 
-        public static DateTime StartOfPreviousMonth(DateTime dateTime)
+        public static void ValidateEventDate(DateTime dateTime)
+        {
+            if (StartOfDay(dateTime) < StartOfDay(DateTime.Now))
+                throw new ArgumentException("Nie można tworzyć i modyfikować spotkań posiadających datę wcześniejszą niż dzisiejsza!");
+        }
+
+        public static DateTime StartOfDay(DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0,
+               0, 0, 0, dateTime.Kind);
+        }
+
+        public static DateRange GetDateRange(DateTime dateTime)
+        {
+            return new DateRange()
+            {
+                DateFrom = StartOfPreviousMonth(dateTime),
+                DateTo = EndOfNextMonth(dateTime)
+            };
+        }
+        private static DateTime StartOfPreviousMonth(DateTime dateTime)
         {
             var month = dateTime.Month;
             var year = dateTime.Year;
@@ -31,7 +51,7 @@ namespace MeetingPlanner.Others.Utils
                 0, 0, 0, dateTime.Kind);
         }
 
-        public static DateTime EndOfNextMonth(DateTime dateTime)
+        private static DateTime EndOfNextMonth(DateTime dateTime)
         {
             var month = dateTime.Month;
             var year = dateTime.Year;
@@ -50,15 +70,6 @@ namespace MeetingPlanner.Others.Utils
 
             return new DateTime(year, month, daysInMonth, 0,
                 0, 0, 0, dateTime.Kind);
-        }
-
-        public static DateRange GetDateRange(DateTime dateTime)
-        {
-            return new DateRange()
-            {
-                DateFrom = StartOfPreviousMonth(dateTime),
-                DateTo = EndOfNextMonth(dateTime)
-            };
         }
     }
 }
