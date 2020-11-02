@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Event } from '../model/event';
 import { Observable } from 'rxjs';
@@ -35,15 +35,15 @@ export class EventService {
       .pipe(map(res => new Event(res)));
   }
 
-  getAllGlobal(): Observable<Event[]> {
-    return this.http.get<Event[]>(this.globalEventsUrl)
+  getAllGlobal(date: string): Observable<Event[]> {
+    return this.http.get<Event[]>(this.globalEventsUrl, {params: new HttpParams().append('date', date)})
       .pipe(
         map((res: Event[]) => res.map(event => new Event(event)))
       );
   }
 
-  getAllPersonal(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.eventsUrl}`)
+  getAllPersonal(date: string): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.eventsUrl}`, {params: new HttpParams().append('date', date)})
       .pipe(
         map((res: Event[]) => res.map(event => new Event(event)))
       );

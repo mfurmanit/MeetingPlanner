@@ -24,16 +24,16 @@ namespace MeetingPlanner.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<EventResponse> GetAllPersonal(ClaimsPrincipal userContext)
+        public IEnumerable<EventResponse> GetAllPersonal(DateTime date, ClaimsPrincipal userContext)
         {
             var userId = _userService.GetUserId(userContext);
-            var events = _repository.GetAllPersonal(userId);
+            var events = _repository.GetAllPersonal(DateUtils.GetDateRange(date), userId);
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
-        public IEnumerable<EventResponse> GetAllGlobal()
+        public IEnumerable<EventResponse> GetAllGlobal(DateTime date)
         {
-            var events = _repository.GetAllGlobal();
+            var events = _repository.GetAllGlobal(DateUtils.GetDateRange(date));
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 

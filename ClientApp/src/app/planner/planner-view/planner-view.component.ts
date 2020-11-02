@@ -13,6 +13,7 @@ import { Event } from '../../shared/model/event';
 import { ApplicationService, SnackBarService } from '../../shared/services';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/dialogs';
+import { parseDateParam } from '../../shared/helpers/application.helper';
 
 const colors: any = {
   red: {
@@ -86,7 +87,8 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
   }
 
   getEvents(): void {
-    const method = this.isGlobal ? this.service.getAllGlobal() : this.service.getAllPersonal();
+    const date = parseDateParam(this.viewDate);
+    const method = this.isGlobal ? this.service.getAllGlobal(date) : this.service.getAllPersonal(date);
     this.subscription.add(method.subscribe(events => this.mapEvents(events)));
   }
 
@@ -95,6 +97,10 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
       this.activeDayIsOpen = !((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0);
       this.viewDate = date;
     }
+  }
+
+  viewDateChange(): void {
+    this.getEvents();
   }
 
   private editEvent(event: CalendarEvent): void {
@@ -127,6 +133,8 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
   }
 
   private mapEvents(events: Event[]): void {
+    this.events = [];
+
     events.forEach((apiEvent: Event) => {
       this.events.push({
         id: apiEvent.id,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4.Extensions;
 using MeetingPlanner.Data;
+using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,14 +18,21 @@ namespace MeetingPlanner.Repositories
             _context = context;
         }
 
-        public IEnumerable<Event> GetAllGlobal()
+        public IEnumerable<Event> GetAllGlobal(DateRange dateRange)
         {
-            return _context.Events.Where(eventObject => true.Equals(eventObject.Global)).ToList();
+            return _context.Events.Where(eventObject => 
+                true.Equals(eventObject.Global) &&
+                eventObject.Date >= dateRange.DateFrom &&
+                eventObject.Date <= dateRange.DateTo).ToList();
         }
 
-        public IEnumerable<Event> GetAllPersonal(string userId)
+        public IEnumerable<Event> GetAllPersonal(DateRange dateRange, string userId)
         {
-            return _context.Events.Where(eventObject => false.Equals(eventObject.Global) && userId.Equals(eventObject.User.Id)).ToList();
+            return _context.Events.Where(eventObject => 
+                false.Equals(eventObject.Global) &&
+                userId.Equals(eventObject.User.Id) && 
+                eventObject.Date >= dateRange.DateFrom && 
+                eventObject.Date <= dateRange.DateTo).ToList();
         }
 
         public IEnumerable<Event> GetAllWithNotifications()

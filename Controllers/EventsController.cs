@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MeetingPlanner.Dto;
 using MeetingPlanner.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -20,16 +21,16 @@ namespace MeetingPlanner.Controllers
         // GET: api/events
         [Authorize]
         [HttpGet]
-        public IEnumerable<EventResponse> GetAll()
+        public IEnumerable<EventResponse> GetAll([FromQuery(Name = "date")] DateTime date)
         {
-            return _service.GetAllPersonal(HttpContext.User);
+            return _service.GetAllPersonal(date, HttpContext.User);
         }
 
         // GET: api/global-events
         [HttpGet("global")]
-        public IEnumerable<EventResponse> GetAllGlobal()
+        public IEnumerable<EventResponse> GetAllGlobal([FromQuery(Name = "date")] DateTime date)
         {
-            return _service.GetAllGlobal();
+            return _service.GetAllGlobal(date);
         }
 
         // GET api/events/{id}

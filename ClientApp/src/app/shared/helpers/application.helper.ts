@@ -1,4 +1,5 @@
 import * as _ from 'lodash-es';
+import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 
 export function isEmpty(value: any) {
@@ -24,4 +25,8 @@ export function initTranslations(translate: TranslateService) {
     translate.use(lang);
     localStorage.setItem('language', lang);
   }
+}
+
+export function parseDateParam(date: Date) {
+  return moment(date).format('YYYY-MM-DD');
 }
