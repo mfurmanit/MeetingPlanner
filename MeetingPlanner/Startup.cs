@@ -32,7 +32,7 @@ namespace MeetingPlanner
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
@@ -80,7 +80,7 @@ namespace MeetingPlanner
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "ClientApp/dist");
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             // Logging file
             var loggingFilePath = Configuration.GetSection("LoggingFilePath").Get<string>();
