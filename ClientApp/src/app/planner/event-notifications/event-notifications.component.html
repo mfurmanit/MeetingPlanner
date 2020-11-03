@@ -16,7 +16,8 @@
       </app-select-input>
       <app-select-input class="mr-2 w-15" [placeholderToTranslate]="'common.unit'" [required]="true"
                         [controlName]="'unit'" [form]="$any(notification)"
-                        [values]="units" [customValue]="'value'" [customDisplay]="'key'"
+                        [values]="formGroup?.get('hourFrom')?.value ? units : filteredUnits"
+                        [customValue]="'value'" [customDisplay]="'key'"
                         [customDisplayTranslate]="true">
       </app-select-input>
       <span class="d-inline-flex align-items-center mr-2">
@@ -24,6 +25,9 @@
       </span>
       <span class="d-inline-flex align-items-center cursor-pointer">
         <mat-icon (click)="deleteNotification($any(notification))">delete</mat-icon>
+      </span>
+      <span class="d-inline-flex align-items-center cursor-pointer ml-2" *ngIf="!formGroup?.get('hourFrom')?.value">
+        <mat-icon [matTooltip]="'messages.unitsInfo' | translate | capitalize">info</mat-icon>
       </span>
     </div>
   </ng-container>

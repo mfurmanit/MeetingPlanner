@@ -1,0 +1,30 @@
+.field {
+  width: 100% !important;
+  position: relative;
+  padding: 0;
+}
+
+.button__left {
+  margin-right: 15px;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 100%;
+}
+
+::ng-deep .timepicker__actions {
+  justify-content: center !important;
+}
+
+::ng-deep .timepicker-dial__control_editable:focus, ::ng-deep .timepicker-dial__control {
+  color: #fff !important;
+  outline: #c2185b !important;
+  background-color: #c2185b !important;
+  cursor: auto !important;
+}
+
+input[readonly] {
+  cursor: pointer;
+}
+
+

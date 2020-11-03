@@ -1,0 +1,25 @@
+<div class="dialog">
+
+  <button role="button" class="dialog__cancel" [mat-dialog-close]="false">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <mat-dialog-content>
+    <h4 class="dialog__action">{{ data.action | capitalize }}</h4>
+    <span class="dialog__description">{{ data.message | capitalize}}</span>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+
+    <div class="buttons__wrapper">
+      <button role="button" mat-raised-button color="primary" type="button" [mat-dialog-close]="true">
+        {{ (data?.button ? (data.button | capitalize) :  ('buttons.confirm'| translate | capitalize)) }}
+      </button>
+
+      <button role="button" mat-button type="submit" [mat-dialog-close]="false">
+        {{ 'buttons.cancel'| translate | capitalize }}
+      </button>
+    </div>
+
+  </mat-dialog-actions>
+</div>

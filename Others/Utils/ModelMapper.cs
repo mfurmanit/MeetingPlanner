@@ -2,11 +2,11 @@
 using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
 
-namespace MeetingPlanner.Profiles
+namespace MeetingPlanner.Others.Utils
 {
-    public class EventProfile : Profile
+    public class ModelMapper : Profile
     {
-        public EventProfile()
+        public ModelMapper()
         {
             CreateMap<EventRequest, Event>();
             CreateMap<Event, EventResponse>();

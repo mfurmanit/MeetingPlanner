@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Event } from '../model/event';
 import { Observable } from 'rxjs';
@@ -21,6 +21,10 @@ export class EventService {
     return this.http.put<Event>(`${this.eventsUrl}/${id}`, event);
   }
 
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.eventsUrl}/${id}`);
+  }
+
   getOneById(id: string): Observable<Event> {
     return this.http.get(`${this.eventsUrl}/${id}`)
       .pipe(map(res => new Event(res)));
@@ -31,15 +35,15 @@ export class EventService {
       .pipe(map(res => new Event(res)));
   }
 
-  getAllGlobal(): Observable<Event[]> {
-    return this.http.get<Event[]>(this.globalEventsUrl)
+  getAllGlobal(date: string): Observable<Event[]> {
+    return this.http.get<Event[]>(this.globalEventsUrl, {params: new HttpParams().append('date', date)})
       .pipe(
         map((res: Event[]) => res.map(event => new Event(event)))
       );
   }
 
-  getAll(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.eventsUrl}`)
+  getAllPersonal(date: string): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.eventsUrl}`, {params: new HttpParams().append('date', date)})
       .pipe(
         map((res: Event[]) => res.map(event => new Event(event)))
       );

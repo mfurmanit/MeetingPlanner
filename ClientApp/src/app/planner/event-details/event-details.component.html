@@ -6,23 +6,22 @@
     </app-input>
 
     <app-date-input class="field" [form]="form" [controlName]="'date'" [required]="true"
-                    [placeholderToTranslate]="'event.date'">
+                    [placeholderToTranslate]="'event.date'" [minDate]="minDate">
     </app-date-input>
 
-    <app-input class="field" [form]="form" [controlName]="'hourFrom'"
-               [placeholderToTranslate]="'event.hourFrom'">
-    </app-input>
+    <app-time-input class="field" [form]="form"
+                    placeholder="{{ 'event.hourFrom' | translate | capitalize }}"
+                    [controlName]="'hourFrom'">
+    </app-time-input>
 
-    <app-input class="field" [form]="form" [controlName]="'hourTo'"
-               [placeholderToTranslate]="'event.hourTo'">
-    </app-input>
+    <app-time-input *ngIf="form?.get('hourFrom').value"
+                    class="field" [form]="form"
+                    placeholder="{{ 'event.hourTo' | translate | capitalize }}"
+                    [controlName]="'hourTo'">
+    </app-time-input>
 
-    <app-checkbox *ngIf="!isGlobal" class="field" [form]="form"
+    <app-checkbox *ngIf="!isGlobal" class="field" [form]="form" (isChecked)="onGlobalChange($event)"
                   [controlName]="'global'" [placeholderToTranslate]="'event.global'">
-    </app-checkbox>
-
-    <app-checkbox class="field" [form]="form" [controlName]="'recurring'"
-                  [placeholderToTranslate]="'event.recurring'">
     </app-checkbox>
 
     <app-input class="field field--wider" [form]="form" [controlName]="'description'"
@@ -31,7 +30,7 @@
 
   </div>
 
-  <app-event-notifications *ngIf="!isGlobal"
+  <app-event-notifications *ngIf="!isGlobal && !form?.get('global').value"
                            [event]="event" [formGroup]="form">
   </app-event-notifications>
 

@@ -1,18 +1,3 @@
-export const POLISH_MONTHS = [
-  'Styczeń',
-  'Luty',
-  'Marzec',
-  'Kwieceń',
-  'Maj',
-  'Czerwiec',
-  'Lipiec',
-  'Sierpień',
-  'Wrzesień',
-  'Październik',
-  'Listopad',
-  'Grudzień'
-];
-
 export const COLORS: any = {
   global: {
     primary: '#ad2121',

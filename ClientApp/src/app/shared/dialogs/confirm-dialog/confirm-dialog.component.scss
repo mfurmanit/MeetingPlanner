@@ -1,0 +1,35 @@
+.dialog {
+  padding: 40px 15px;
+  font-size: 1rem;
+
+  &__action {
+    font-size: 1.5rem;
+  }
+
+  &__cancel {
+    float: right;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__description {
+    display: block;
+    padding: 10px 0;
+  }
+}
+
+::ng-deep .mat-dialog-content {
+  margin: 0 !important;
+}
+
+::ng-deep .mat-dialog-container {
+  padding: 18px !important;
+}
+
+::ng-deep .mat-dialog-actions {
+  padding: 8px 20px !important;
+}

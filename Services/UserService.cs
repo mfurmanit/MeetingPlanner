@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MeetingPlanner.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
 

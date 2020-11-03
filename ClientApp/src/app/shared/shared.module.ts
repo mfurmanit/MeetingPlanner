@@ -32,11 +32,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import * as fromPipes from './pipes/index';
 import * as fromDirectives from './directives/index';
 import * as fromInputs from './inputs/index';
 import * as fromServices from './services/index';
+import * as fromDialogs from './dialogs/index';
 
 const ANGULAR_MATERIAL = [
   MatAutocompleteModule,
@@ -77,12 +79,14 @@ const ANGULAR_MATERIAL = [
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    ANGULAR_MATERIAL
+    ANGULAR_MATERIAL,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     TranslateModule,
     ReactiveFormsModule,
     ANGULAR_MATERIAL,
+    NgxMaterialTimepickerModule,
     fromPipes.pipes,
     fromDirectives.directives,
     fromInputs.inputs
@@ -90,9 +94,12 @@ const ANGULAR_MATERIAL = [
   declarations: [
     fromPipes.pipes,
     fromDirectives.directives,
-    fromInputs.inputs
+    fromInputs.inputs,
+    fromDialogs.dialogs
   ],
-  entryComponents: [],
+  entryComponents: [
+    fromDialogs.dialogs
+  ],
   providers: [
     fromServices.services
   ]

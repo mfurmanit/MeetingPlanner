@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4.Extensions;
 using MeetingPlanner.Data;
+using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
-using MeetingPlanner.Others;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeetingPlanner.Repositories
@@ -12,26 +12,46 @@ namespace MeetingPlanner.Repositories
     public class EventRepository : IEventRepository
     {
         private readonly ApplicationDbContext _context;
+
         public EventRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<Event> GetAll(string userId)
+        public IEnumerable<Event> GetAllGlobal(DateRange dateRange)
         {
-            return _context.Events.Where(eventObject => false.Equals(eventObject.Global) && userId.Equals(eventObject.User.Id)).ToList();
+            return _context.Events.Where(eventObject => 
+                true.Equals(eventObject.Global) &&
+                eventObject.Date >= dateRange.DateFrom &&
+                eventObject.Date <= dateRange.DateTo).ToList();
         }
 
-        public IEnumerable<Event> GetAllGlobal()
+        public IEnumerable<Event> GetAllPersonal(DateRange dateRange, string userId)
         {
-            return _context.Events.Where(eventObject => true.Equals(eventObject.Global)).ToList();
+            return _context.Events.Where(eventObject => 
+                false.Equals(eventObject.Global) &&
+                userId.Equals(eventObject.User.Id) && 
+                eventObject.Date >= dateRange.DateFrom && 
+                eventObject.Date <= dateRange.DateTo).ToList();
         }
 
-        public Event GetOneById(string id, bool global)
+        public IEnumerable<Event> GetAllWithNotifications()
+        {
+            return _context.Events.Where(eventObject => false.Equals(eventObject.Global) && eventObject.Notifications.Count > 0)
+                .Include(entity => entity.Notifications)
+                .Include(entity => entity.User)
+                .ToList();
+        }
+
+        public Event GetOne(string id)
+        {
+            return _context.Events.AsNoTracking().FirstOrDefault(entity => id.Equals(entity.Id.ToString()));
+        }
+
+        public Event GetOneGlobal(string id)
         {
             return _context.Events
-                .Include(entity => entity.Notifications)
-                .FirstOrDefault(entity => id.Equals(entity.Id.ToString()) && global.Equals(entity.Global));
+                .FirstOrDefault(entity => id.Equals(entity.Id.ToString()) && true.Equals(entity.Global));
         }
 
         public Event GetOnePersonal(string id)
@@ -43,19 +63,18 @@ namespace MeetingPlanner.Repositories
                 .FirstOrDefault(entity => id.Equals(entity.Id.ToString()) && false.Equals(entity.Global));
         }
 
-        public void DeleteOneById()
+        public Event GetOneWithNotifications(string id)
         {
-            throw new NotImplementedException();
+            return _context.Events.Include(entity => entity.Notifications)
+                .FirstOrDefault(entity => id.Equals(entity.Id.ToString()));
         }
 
-        public Event Update(Event eventObject)
+        public Event Update(Event eventObject, bool stateChanged)
         {
             if (eventObject == null)
-            {
-                throw new ArgumentNullException("Przekazany argument nie może być pusty.");
-            }
+                throw new ArgumentNullException("Przekazany argument nie może być pusty!");
 
-            RemoveNotifications(eventObject);
+            RemoveNotifications(eventObject, stateChanged);
             _context.Events.Update(eventObject);
             _context.SaveChanges();
 
@@ -65,9 +84,7 @@ namespace MeetingPlanner.Repositories
         public Event Add(Event eventObject)
         {
             if (eventObject == null)
-            {
-                throw new ArgumentNullException("Przekazany argument nie może być pusty.");
-            }
+                throw new ArgumentNullException("Przekazany argument nie może być pusty!");
 
             _context.Events.Add(eventObject);
             _context.SaveChanges();
@@ -75,9 +92,21 @@ namespace MeetingPlanner.Repositories
             return eventObject;
         }
 
-        private void RemoveNotifications(Event eventObject)
+        public void Delete(Event eventObject)
         {
-            if (eventObject.Global) return;
+            if (eventObject == null)
+                throw new ArgumentNullException("Przekazany argument nie może być pusty!");
+
+            if (!eventObject.Global && !eventObject.Notifications.IsNullOrEmpty()) 
+                _context.Notifications.RemoveRange(eventObject.Notifications);
+
+            _context.Events.Remove(eventObject);
+            _context.SaveChanges();
+        }
+
+        private void RemoveNotifications(Event eventObject, bool stateChanged)
+        {
+            if (eventObject.Global && !stateChanged) return;
             
             var notificationsToRemove = 
                 (from notification in _context.Notifications

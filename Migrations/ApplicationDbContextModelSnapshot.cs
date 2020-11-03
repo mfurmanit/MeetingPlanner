@@ -186,18 +186,12 @@ namespace MeetingPlanner.Migrations
                     b.Property<string>("HourTo")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Recurring")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
-
-                    b.Property<bool>("WithTime")
-                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

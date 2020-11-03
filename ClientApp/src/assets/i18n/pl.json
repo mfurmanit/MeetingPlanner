@@ -7,7 +7,10 @@
     "cancel": "wróć",
     "addGlobal": "dodaj spotkanie ogólne",
     "addPersonal": "dodaj spotkanie prywatne",
-    "addNotification": "dodaj powiadomienie"
+    "addNotification": "dodaj powiadomienie",
+    "choose": "wybierz",
+    "close": "zamknij",
+    "confirm": "potwierdź"
   },
   "event": {
     "title": "tytuł",
@@ -15,8 +18,7 @@
     "date": "data spotkania",
     "hourFrom": "godzina rozpoczęcia",
     "hourTo": "godzina zakończenia",
-    "global": "spotkanie ogólne",
-    "recurring": "spotkanie cykliczne"
+    "global": "spotkanie ogólne"
   },
   "validation": {
     "fieldRequired": "Pole jest wymagane.",
@@ -35,7 +37,11 @@
     "notificationAdded": "Powiadomienie zostało dodane do listy. Uzupełnij wymagane pola i zapisz spotkanie aby utrwalić modyfikację.",
     "notificationDeleted": "Powiadomienie zostało usunięte z listy. Zapisz spotkanie aby utrwalić modyfikację.",
     "notificationInfoStart": "Powiadomienie e-mail na ",
-    "notificationInfoEnd": " przed spotkaniem."
+    "notificationInfoEnd": " przed spotkaniem.",
+    "unitsInfo": "Minuty i godziny (jako jednostki) są dostępne do wyboru wyłącznie po wprowadzeniu daty rozpoczęcia spotkania.",
+    "eventDeletionHeader": "Usuwanie spotkania",
+    "eventDeletionContent": "Ta operacja jest nieodwracalna. Czy na pewno chcesz usunąć wybrane spotkanie?",
+    "eventDeleted": "Spotkanie zostało usunięte."
   },
   "common": {
     "login": "Zaloguj się",

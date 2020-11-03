@@ -1,4 +1,4 @@
-@import '~@angular/material/prebuilt-themes/pink-bluegrey.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~angular-calendar/css/angular-calendar.css';
 
 a {
@@ -29,4 +29,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 button {
   text-transform: uppercase;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 1rem !important;
+  padding: 12px !important;;
+  max-width: none !important;;
 }

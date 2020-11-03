@@ -21,6 +21,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   textArea = InputType.TEXTAREA;
   event: Event;
+  minDate: Date = new Date();
 
   private readonly subscriptions = new Subscription();
 
@@ -62,17 +63,23 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   updateEvent(): void {
     this.checkDataBeforeSave();
     this.subscriptions.add(this.service.update(this.form.value, this.event.id)
-      .subscribe(event => {
+      .subscribe(() => {
         this.snackBar.openSnackBar('messages.eventUpdated', true, true);
       }));
   }
 
-  private checkDataBeforeSave(): void {
-    if (!this.hasNullValue('hourFrom') || !this.hasNullValue('hourTo')) {
-      this.form.get('withTime').patchValue(true);
+  onGlobalChange(checked: boolean) {
+    if (checked) {
+      this.form.removeControl('notifications');
+    } else {
+      this.form.addControl('notifications', this.formBuilder.array([]));
     }
-    if (this.isGlobal) {
+  }
+
+  private checkDataBeforeSave(): void {
+    if (this.isGlobal || this.form.get('global').value === true) {
       this.form.get('global').patchValue(true);
+      this.form.removeControl('notifications');
     }
   }
 
@@ -109,8 +116,6 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       date: [null, Validators.required],
       hourFrom: [null],
       hourTo: [null],
-      withTime: [false],
-      recurring: [false],
       global: [this.isGlobal],
       notifications: this.formBuilder.array([])
     });
