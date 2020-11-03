@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading;
 using AutoMapper;
 using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
@@ -43,9 +42,7 @@ namespace MeetingPlanner.Services
             var eventObject = global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
 
             if (eventObject == null)
-            {
                 throw new ObjectNotFoundException("Spotkanie o wskazanym identyfikatorze nie istnieje!");
-            }
 
             var globalEvent = global && eventObject.Global;
             var personalEvent = !globalEvent;
@@ -53,16 +50,12 @@ namespace MeetingPlanner.Services
             var response = _mapper.Map<EventResponse>(eventObject);
 
             if (globalEvent)
-            {
                 return response;
-            }
 
             var properUserContext = userContext != null && eventObject.User.Id.Equals(_userService.GetUserId(userContext));
 
             if (personalEvent && properUserContext)
-            {
                 return response;
-            }
 
             throw new AccessViolationException("Nie posiadasz uprawnień do wyświetlenia wskazanego spotkania!");
         }
@@ -71,20 +64,17 @@ namespace MeetingPlanner.Services
         {
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
+            TimeUtils.ValidateBothHours(request.HourFrom, request.HourTo);
             DateUtils.ValidateEventDate(request.Date);
 
             var eventObject = _mapper.Map<Event>(request);
             var mappedObject = _mapper.Map<Event>(eventObject);
 
             if (!mappedObject.Global)
-            {
                 mappedObject.User = _userService.GetUser(userContext);
-            }
 
             if (!mappedObject.Global && mappedObject.User == null)
-            {
                 throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
-            }
 
             var createdEvent = _repository.Add(mappedObject);
             return _mapper.Map<EventResponse>(createdEvent);
@@ -94,6 +84,7 @@ namespace MeetingPlanner.Services
         {
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
+            TimeUtils.ValidateBothHours(request.HourFrom, request.HourTo);
             DateUtils.ValidateEventDate(request.Date);
 
             var dbEvent = _repository.GetOne(id);
@@ -101,9 +92,7 @@ namespace MeetingPlanner.Services
             var stateChanged = false;
 
             if (dbEvent.Global && !request.Global)
-            {
                 throw new ArgumentException("Nie można zmienić wydarzenia ogólnego na prywatne!");
-            }
 
             if (!dbEvent.Global && request.Global) // Changing personal event to global event
             {
@@ -120,14 +109,10 @@ namespace MeetingPlanner.Services
             }
 
             if (!mappedObject.Global)
-            {
                 mappedObject.User = _userService.GetUser(userContext);
-            }
 
             if (!mappedObject.Global && mappedObject.User == null)
-            {
                 throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
-            }
 
             var updatedEvent = _repository.Update(mappedObject, stateChanged);
             return _mapper.Map<EventResponse>(updatedEvent);

@@ -13,7 +13,7 @@ import { Event } from '../../shared/model/event';
 import { ApplicationService, SnackBarService } from '../../shared/services';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/dialogs';
-import { parseDateParam } from '../../shared/helpers/application.helper';
+import { isEmpty, parseDateParam } from '../../shared/helpers/application.helper';
 
 const colors: any = {
   red: {
@@ -50,12 +50,12 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="material-icons mat-icon">edit</i>',
+      label: '<i class="material-icons mat-icon d-inline-flex align-middle">edit</i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => this.editEvent(event)
     },
     {
-      label: '<i class="material-icons mat-icon">delete</i>',
+      label: '<i class="material-icons mat-icon d-inline-flex align-middle">delete</i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => this.openDeleteDialog(event)
     }
@@ -140,7 +140,7 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
         id: apiEvent.id,
         start: startOfDay(new Date(apiEvent.date)),
         end: endOfDay(new Date(apiEvent.date)),
-        title: apiEvent.title,
+        title: this.mapTitle(apiEvent),
         color: colors.red,
         actions: this.actions,
         resizable: {
@@ -152,6 +152,16 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
     });
 
     this.refresh.next();
+  }
+
+  private mapTitle(event: Event): string {
+    if (!isEmpty(event.hourFrom) && !isEmpty(event.hourTo)) {
+      return `${event.title}  |  ${event.hourFrom} - ${event.hourTo}`;
+    } else if (!isEmpty(event.hourFrom)) {
+      return `${event.title}  |  ${event.hourFrom}`;
+    } else {
+      return event.title;
+    }
   }
 
   private listenForLanguageChange() {

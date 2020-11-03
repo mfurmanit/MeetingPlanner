@@ -19,5 +19,24 @@ namespace MeetingPlanner.Others.Utils
                     throw new ArgumentException("Wprowadzono niewłaściwy format godziny!");
             }
         }
+
+        public static void ValidateBothHours(string hourFrom, string hourTo)
+        {
+            if (!hourFrom.IsNullOrEmpty() && !hourTo.IsNullOrEmpty())
+            {
+                var timeFrom = hourFrom.Split(":");
+                var timeTo = hourTo.Split(":");
+                var secondsFrom = CountMinutes(timeFrom[0], timeFrom[1]);
+                var secondsTo = CountMinutes(timeTo[0], timeTo[1]);
+                
+                if (secondsFrom > secondsTo)
+                    throw new ArgumentException("Godzina zakończenia nie może być większa niż godzina rozpoczęcia spotkania!");
+            }
+        }
+
+        private static int CountMinutes(string hours, string minutes)
+        {
+            return Convert.ToInt32(minutes) + (Convert.ToInt32(hours) * 60);
+        }
     }
 }
