@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -63,9 +64,11 @@ namespace MeetingPlanner.Tests
             var responseObject = JsonConvert.DeserializeObject<EventResponse>(responseContent);
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-            Assert.Equal(responseObject.Title, requestObject.Title);
+            response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+            Assert.NotEqual(responseObject.Id, Guid.Empty);
+            Assert.Equal(responseObject.Title, requestObject.Title);
+            Assert.Empty(responseObject.Notifications);
         }
     }
 }
