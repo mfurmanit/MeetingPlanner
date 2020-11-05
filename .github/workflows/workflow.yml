@@ -1,9 +1,11 @@
 name: Deploy MeetingPlanner to Azure
 
-on: [push]
-#  push:
-#    branches:
-#      - master
+# on: [push]
+on:
+  push:
+    branches:
+      - development
+      - master
 
 env:
   AZURE_WEBAPP_NAME: MeetingPlanner
@@ -16,7 +18,7 @@ jobs:
     steps:
 
       # Checkout the repository
-      - uses: actions/checkout@master
+      - uses: actions/checkout@development
       
       # Setup .NET Core SDK
       - name: Setup .NET Core
@@ -30,11 +32,11 @@ jobs:
       
       # Run dotnet build
       - name: Build
-        run: dontnet build --no-restore -c Release
+        run: dotnet build --no-restore -c Release
         
       # Run dotnet publish  
       - name: Publish
-        run: dontnet publish --no-build -c Release -output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        run: dotnet publish --no-build -c Release -output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           
       # Deploy to Azure Web apps
       - name: 'Deploy to Azure WebApp'
