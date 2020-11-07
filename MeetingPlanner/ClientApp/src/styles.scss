@@ -1,5 +1,5 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~angular-calendar/css/angular-calendar.css';
+@import '~angular-calendar/scss/angular-calendar.scss';
 
 a {
   color: #0366d6;
@@ -33,6 +33,16 @@ button {
 
 ::ng-deep .mat-tooltip {
   font-size: 1rem !important;
-  padding: 12px !important;;
-  max-width: none !important;;
+  padding: 12px !important;
+  max-width: none !important;
+}
+
+.calendar-theme {
+  @include cal-theme(
+      (
+        badge-color: #556df2,
+        weekend-color: #556df2,
+        today-bg: #f2f5ff
+      )
+  );
 }

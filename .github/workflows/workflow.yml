@@ -12,7 +12,8 @@ env:
   DOTNET_VERSION: '3.1.102'
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Build and Deploy MeetingPlanner
     runs-on: ubuntu-latest
     defaults:
       run:
