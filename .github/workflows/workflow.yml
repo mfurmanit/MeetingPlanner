@@ -9,12 +9,14 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: MeetingPlanner
-  AZURE_WEBAPP_PACKAGE_PATH: './MeetingPlanner'
-  DOTNET_VERSION: '3.1.101'
+  DOTNET_VERSION: '3.1.102'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./MeetingPlanner
     steps:
 
       # Checkout the repository
@@ -38,7 +40,7 @@ jobs:
         
       # Run dotnet publish  
       - name: Publish
-        run: dotnet publish --no-build -c Release --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        run: dotnet publish --no-build -c Release --output ${{env.DOTNET_ROOT}}/MeetingPlanner
           
       # Deploy to Azure Web apps
       - name: 'Deploy to Azure WebApp'
@@ -46,4 +48,4 @@ jobs:
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+          package: ${{env.DOTNET_ROOT}}/MeetingPlanner
