@@ -38,7 +38,7 @@ jobs:
         
       # Run dotnet publish  
       - name: Publish
-        run: dotnet publish --no-build -c Release -output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        run: dotnet publish --no-build -c Release --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           
       # Deploy to Azure Web apps
       - name: 'Deploy to Azure WebApp'
