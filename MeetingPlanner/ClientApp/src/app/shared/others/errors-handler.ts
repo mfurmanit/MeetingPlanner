@@ -15,6 +15,8 @@ export class ErrorsHandler implements ErrorHandler {
   handleError(error: Error) {
     if (error instanceof HttpErrorResponse && !isNullOrUndefined(error?.error?.Message)) {
       this.zone.run(() => this.snackBar.openSnackBar(error.error.Message, true, false));
+    } else if (error instanceof Error) {
+      this.zone.run(() => this.snackBar.openSnackBar(error.message, true, false));
     }
   }
 }
