@@ -1,5 +1,20 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~angular-calendar/css/angular-calendar.css';
+@import '~angular-calendar/scss/angular-calendar.scss';
+
+:root {
+  --size: 200px;
+  --clr1: #c5cbe7;
+  --clr2: #b1bae2;
+  --clr3: #8e9fec;
+  --clr4: #6a80ea;
+  --clr5: #556df2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 a {
   color: #0366d6;
@@ -33,6 +48,60 @@ button {
 
 ::ng-deep .mat-tooltip {
   font-size: 1rem !important;
-  padding: 12px !important;;
-  max-width: none !important;;
+  padding: 12px !important;
+  max-width: none !important;
+}
+
+.calendar-theme {
+  @include cal-theme(
+      (
+        badge-color: #556df2,
+        weekend-color: #556df2,
+        today-bg: #f2f5ff
+      )
+  );
+}
+
+.spinner {
+  --animation-duration: 850ms;
+  width: 100%;
+  height: 100%;
+  margin: auto auto;
+
+  .spinner-item {
+    position: absolute;
+    width: var(--item-size);
+    height: var(--item-size);
+    top: calc(50% - var(--item-size) / 2);
+    left: calc(50% - var(--item-size) / 2);
+    border: 4px solid transparent;
+    border-left: 4px solid var(--clr-spinner);
+    border-right: 4px solid var(--clr-spinner);
+    border-radius: 50%;
+    animation: spinner var(--animation-duration) linear infinite;
+
+    @keyframes spinner {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
+  .spinner-item:nth-of-type(1) {
+    --item-size: var(--size);
+    --clr-spinner: var(--clr1);
+    border-top: 4px solid var(--clr1);
+  }
+
+  .spinner-item:nth-of-type(2) {
+    --item-size: calc(var(--size) - 50px);
+    --clr-spinner: var(--clr5);
+    border-bottom: 4px solid var(--clr5);
+  }
+
+  .spinner-item:nth-of-type(3) {
+    --item-size: calc(var(--size) - 100px);
+    --clr-spinner: var(--clr3);
+    border-top: 4px solid var(--clr3);
+  }
 }

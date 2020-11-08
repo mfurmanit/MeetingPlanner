@@ -3,54 +3,54 @@ using System;
 using MeetingPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MeetingPlanner.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201025083933_InitializeDatabase")]
-    partial class InitializeDatabase
+    [Migration("20201104201253_InitialSqlServerMigration")]
+    partial class InitialSqlServerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("character varying(50000)")
+                        .HasColumnType("nvarchar(max)")
                         .HasMaxLength(50000);
 
                     b.Property<string>("DeviceCode")
                         .IsRequired()
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<DateTime?>("Expiration")
                         .IsRequired()
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("UserCode");
@@ -66,32 +66,32 @@ namespace MeetingPlanner.Migrations
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.PersistedGrant", b =>
                 {
                     b.Property<string>("Key")
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("character varying(50000)")
+                        .HasColumnType("nvarchar(max)")
                         .HasMaxLength(50000);
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Key");
@@ -103,97 +103,56 @@ namespace MeetingPlanner.Migrations
                     b.ToTable("PersistedGrants");
                 });
 
-            modelBuilder.Entity("MeetingPlanner.Event", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Global")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("HourFrom")
-                        .HasColumnType("text");
-
-                    b.Property<string>("HourTo")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Recurring")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("WithTime")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Events");
-                });
-
             modelBuilder.Entity("MeetingPlanner.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -203,25 +162,61 @@ namespace MeetingPlanner.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("MeetingPlanner.Models.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Global")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HourFrom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HourTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("MeetingPlanner.Models.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EventId")
-                        .HasColumnType("uuid");
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("Unit")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -233,25 +228,26 @@ namespace MeetingPlanner.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -260,18 +256,18 @@ namespace MeetingPlanner.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -284,18 +280,18 @@ namespace MeetingPlanner.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -307,19 +303,19 @@ namespace MeetingPlanner.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -331,10 +327,10 @@ namespace MeetingPlanner.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -346,25 +342,25 @@ namespace MeetingPlanner.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("MeetingPlanner.Event", b =>
+            modelBuilder.Entity("MeetingPlanner.Models.Event", b =>
                 {
                     b.HasOne("MeetingPlanner.Models.ApplicationUser", "User")
                         .WithMany("Event")
@@ -373,9 +369,11 @@ namespace MeetingPlanner.Migrations
 
             modelBuilder.Entity("MeetingPlanner.Models.Notification", b =>
                 {
-                    b.HasOne("MeetingPlanner.Event", null)
+                    b.HasOne("MeetingPlanner.Models.Event", null)
                         .WithMany("Notifications")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MeetingPlanner.Migrations
 {
-    public partial class InitializeDatabase : Migration
+    public partial class InitialSqlServerMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,7 +85,7 @@ namespace MeetingPlanner.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -107,7 +106,7 @@ namespace MeetingPlanner.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -195,8 +194,6 @@ namespace MeetingPlanner.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     HourFrom = table.Column<string>(nullable: true),
                     HourTo = table.Column<string>(nullable: true),
-                    WithTime = table.Column<bool>(nullable: false),
-                    Recurring = table.Column<bool>(nullable: false),
                     Global = table.Column<bool>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -220,7 +217,7 @@ namespace MeetingPlanner.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     Unit = table.Column<int>(nullable: false),
-                    EventId = table.Column<Guid>(nullable: true)
+                    EventId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -230,7 +227,7 @@ namespace MeetingPlanner.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -242,7 +239,8 @@ namespace MeetingPlanner.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -268,7 +266,8 @@ namespace MeetingPlanner.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",

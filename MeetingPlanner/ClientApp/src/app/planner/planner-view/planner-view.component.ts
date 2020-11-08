@@ -15,21 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/dialogs';
 import { isEmpty, parseDateParam } from '../../shared/helpers/application.helper';
 
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
-
 registerLocaleData(localePl);
 registerLocaleData(localeEn);
 registerLocaleData(localeEs);
@@ -61,10 +46,16 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
     }
   ];
 
+  eventColors: any = {
+    primary: '#556df2',
+    secondary: '#D1E8FF',
+  };
+
   events: CalendarEvent[] = [];
 
   readonly view = 'month';
   readonly weekStartsOn = DAYS_OF_WEEK.MONDAY;
+  private readonly themeClass = 'calendar-theme';
   private readonly subscription: Subscription = new Subscription();
 
   constructor(private translateService: TranslateService,
@@ -78,11 +69,13 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    document.body.classList.add(this.themeClass);
     this.isGlobal = this.router.url.includes('global');
     this.getEvents();
   }
 
   ngOnDestroy() {
+    document.body.classList.remove(this.themeClass);
     this.subscription.unsubscribe();
   }
 
@@ -141,7 +134,7 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
         start: startOfDay(new Date(apiEvent.date)),
         end: endOfDay(new Date(apiEvent.date)),
         title: this.mapTitle(apiEvent),
-        color: colors.red,
+        color: this.eventColors,
         actions: this.actions,
         resizable: {
           beforeStart: false,
