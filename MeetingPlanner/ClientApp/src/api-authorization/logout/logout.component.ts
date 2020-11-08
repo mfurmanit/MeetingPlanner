@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationResultStatus, AuthorizeService } from '../authorize.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
+import { SnackBarService } from '../../app/shared/services';
+import { TranslateService } from '@ngx-translate/core';
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -14,12 +16,17 @@ import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authoriza
   styleUrls: ['./logout.component.scss']
 })
 export class LogoutComponent implements OnInit {
+
   public message = new BehaviorSubject<string>(null);
 
   constructor(
     private authorizeService: AuthorizeService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) { }
+    private snackBarService: SnackBarService,
+    private translateService: TranslateService,
+    private router: Router) {
+    this.snackBarService.translate(translateService);
+  }
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
@@ -37,7 +44,7 @@ export class LogoutComponent implements OnInit {
         await this.processLogoutCallback();
         break;
       case LogoutActions.LoggedOut:
-        this.message.next('You successfully logged out!');
+        this.redirectAfterLogout();
         break;
       default:
         throw new Error(`Invalid action '${action}'`);
@@ -106,6 +113,14 @@ export class LogoutComponent implements OnInit {
     return (state && state.returnUrl) ||
       fromQuery ||
       ApplicationPaths.LoggedOut;
+  }
+
+  private redirectAfterLogout() {
+    this.router.navigate(['/planner/global']).then(() => {
+      this.translateService.get('messages.logoutSuccessful').subscribe(translation => {
+        this.snackBarService.openSnackBar(translation, true, false);
+      });
+    });
   }
 }
 

@@ -42,7 +42,8 @@
     "eventDeletionHeader": "Usuwanie spotkania",
     "eventDeletionContent": "Ta operacja jest nieodwracalna. Czy na pewno chcesz usunąć wybrane spotkanie?",
     "eventDeleted": "Spotkanie zostało usunięte.",
-    "profileInfo": "Zalogowany jako {{username}}"
+    "profileInfo": "Zalogowany jako {{username}}",
+    "logoutSuccessful": "Zostałeś poprawnie wylogowany!"
   },
   "common": {
     "login": "Logowanie",

@@ -135,6 +135,9 @@
   <data name="emailRequired" xml:space="preserve">
     <value>La direccion de correo electronico es un campo requerido.</value>
   </data>
+  <data name="invalidLoginAttempt" xml:space="preserve">
+    <value>Error de inicio de sesion. Verifique que la dirección de correo electrónico y la contraseña ingresadas sean correctas.</value>
+  </data>
   <data name="login" xml:space="preserve">
     <value>Iniciar sesión</value>
   </data>

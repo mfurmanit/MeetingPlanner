@@ -135,6 +135,9 @@
   <data name="emailRequired" xml:space="preserve">
     <value>Adres e-mail jest polem wymaganym.</value>
   </data>
+  <data name="invalidLoginAttempt" xml:space="preserve">
+    <value>Nieudana próba logowania. Zweryfikuj, czy wprowadzony adres e-mail i hasło są poprawne.</value>
+  </data>
   <data name="login" xml:space="preserve">
     <value>Logowanie</value>
   </data>

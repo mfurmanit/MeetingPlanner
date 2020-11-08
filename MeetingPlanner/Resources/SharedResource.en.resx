@@ -135,6 +135,9 @@
   <data name="emailRequired" xml:space="preserve">
     <value>E-mail address field is a required.</value>
   </data>
+  <data name="invalidLoginAttempt" xml:space="preserve">
+    <value>Login failed. Verify that the entered email address and password are correct.</value>
+  </data>
   <data name="login" xml:space="preserve">
     <value>Login</value>
   </data>

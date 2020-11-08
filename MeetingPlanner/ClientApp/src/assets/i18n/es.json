@@ -42,7 +42,8 @@
     "eventDeletionHeader": "Eliminando una cita",
     "eventDeletionContent": "Esta operación es irreversible. ¿Está seguro de que desea eliminar la reunión seleccionada?",
     "eventDeleted": "La cita ha sido eliminada.",
-    "profileInfo": "Accedí como {{username}}"
+    "profileInfo": "Accedí como {{username}}",
+    "logoutSuccessful": "¡Ha cerrado su sesión correctamente!"
   },
   "common": {
     "login": "Iniciar sesión",
