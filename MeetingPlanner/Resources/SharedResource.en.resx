@@ -159,6 +159,12 @@
   <data name="register" xml:space="preserve">
     <value>Registration</value>
   </data>
+  <data name="registerButton" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="loginButton" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
   <data name="registerNewUser" xml:space="preserve">
     <value>Create new account</value>
   </data>
