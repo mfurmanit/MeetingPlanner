@@ -2,7 +2,7 @@
   <mat-form-field [formGroupName]="groupName" [class]="cssClass">
     <input matInput type="text" [formControlName]="controlName" [format]="24" [ngxTimepicker]="picker"
            [placeholder]="placeholder" [required]="required" [name]="placeholder" readonly>
-    <ngx-material-timepicker [enableKeyboardInput]="false" [ngxMaterialTimepickerTheme]="ngoTheme"
+    <ngx-material-timepicker [enableKeyboardInput]="false" [theme]="theme"
                              [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn" #picker></ngx-material-timepicker>
     <ng-template #cancelBtn>
       <button role="button" mat-button class="button__left"> {{ 'buttons.close' | translate | uppercase }} </button>
@@ -18,7 +18,7 @@
   <mat-form-field [formGroup]="form" [class]="cssClass">
     <input matInput type="text" [formControlName]="controlName" [format]="24" [ngxTimepicker]="picker"
            [placeholder]="placeholder" [required]="required" [name]="placeholder" readonly>
-    <ngx-material-timepicker [enableKeyboardInput]="false" [ngxMaterialTimepickerTheme]="ngoTheme"
+    <ngx-material-timepicker [enableKeyboardInput]="false" [ngxMaterialTimepickerTheme]="theme"
                              [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn" #picker></ngx-material-timepicker>
     <ng-template #cancelBtn>
       <button role="button" mat-button class="button__left"> {{ 'buttons.close' | translate | uppercase }} </button>

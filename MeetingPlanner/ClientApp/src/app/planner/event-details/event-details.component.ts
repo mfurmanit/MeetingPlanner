@@ -21,7 +21,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   textArea = InputType.TEXTAREA;
   event: Event;
-  minDate: Date = new Date();
+  chosenDate: Date;
 
   private readonly subscriptions = new Subscription();
 
@@ -88,6 +88,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       method.subscribe(event => {
         this.event = event;
+        this.chosenDate = event.date as Date;
         this.form.patchValue(event);
       })
     );
@@ -105,6 +106,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       this.getEvent(params.id);
     } else {
       this.isEditMode = false;
+      this.chosenDate = new Date();
     }
   }
 

@@ -40,3 +40,7 @@ export function handleGlobalFailure(message: string, router: Router): void {
   router.navigate(['/planner/global']);
   throw new Error(message);
 }
+
+export function startOfDay(date: Date): Date {
+  return moment(date).startOf('day').toDate();
+}
