@@ -1,10 +1,8 @@
 name: Deploy MeetingPlanner to Azure
 
-# on: [push]
 on:
   push:
     branches:
-      - development
       - master
 
 env:

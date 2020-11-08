@@ -19,6 +19,7 @@ import { AppMissingTranslationHandler } from './shared/helpers/app-missing-trans
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ApplicationService } from './shared/services';
 import { ErrorsHandler } from './shared/others/errors-handler';
+import { CookieService } from 'ngx-cookie-service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -55,7 +56,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
     { provide: ErrorHandler, useClass: ErrorsHandler },
-    ApplicationService
+    ApplicationService,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

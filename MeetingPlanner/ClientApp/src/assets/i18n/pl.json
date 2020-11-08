@@ -41,13 +41,13 @@
     "unitsInfo": "Minuty i godziny (jako jednostki) są dostępne do wyboru wyłącznie po wprowadzeniu daty rozpoczęcia spotkania.",
     "eventDeletionHeader": "Usuwanie spotkania",
     "eventDeletionContent": "Ta operacja jest nieodwracalna. Czy na pewno chcesz usunąć wybrane spotkanie?",
-    "eventDeleted": "Spotkanie zostało usunięte."
+    "eventDeleted": "Spotkanie zostało usunięte.",
+    "profileInfo": "Zalogowany jako {{username}}"
   },
   "common": {
-    "login": "Zaloguj się",
+    "login": "Logowanie",
     "register": "Rejestracja",
     "logout": "Wyloguj",
-    "profile": "Profil",
     "globalEvents": "Spotkania ogólne",
     "personalEvents": "Spotkania prywatne",
     "language": "Język",

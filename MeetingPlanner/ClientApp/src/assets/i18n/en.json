@@ -41,13 +41,13 @@
     "unitsInfo": "Minutes and times (as units) are only available for selection after entering a meeting start date.",
     "eventDeletionHeader": "Deleting an appointment",
     "eventDeletionContent": "This operation is irreversible. Are you sure you want to delete the selected meeting?",
-    "eventDeleted": "The appointment has been deleted."
+    "eventDeleted": "The appointment has been deleted.",
+    "profileInfo": "Logged in as {{username}}"
   },
   "common": {
-    "login": "Log in",
+    "login": "Login",
     "register": "Registration",
     "logout": "Log out",
-    "profile": "Profile",
     "globalEvents": "Global meetings",
     "personalEvents": "Personal meetings",
     "language": "Language",

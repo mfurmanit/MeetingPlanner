@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
@@ -11,12 +14,15 @@ using MeetingPlanner.Dto;
 using MeetingPlanner.Repositories;
 using MeetingPlanner.Models;
 using MeetingPlanner.Others.Exceptions;
+using MeetingPlanner.Others.Localization;
 using MeetingPlanner.Others.Scheduling;
 using MeetingPlanner.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -45,9 +51,45 @@ namespace MeetingPlanner
 
             services.AddAuthentication().AddIdentityServerJwt();
 
-            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options => 
+            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(options =>
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-            services.AddRazorPages();
+
+            services.AddRazorPages()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        var assemblyName =
+                            new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName ?? string.Empty);
+                        return factory.Create("SharedResource", assemblyName.Name);
+                    };
+                });
+
+            // Configure localization / culture to translate Razor Pages
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.Configure<RequestLocalizationOptions>(
+                options =>
+                {
+                    var supportedCultures = new List<CultureInfo>
+                    {
+                        new CultureInfo("en"),
+                        new CultureInfo("es"),
+                        new CultureInfo("pl")
+                    };
+
+                    options.DefaultRequestCulture = new RequestCulture(culture: "pl", uiCulture: "pl");
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+
+                    options.RequestCultureProviders.Clear();
+                    var provider = new LocalizationCookieProvider
+                    {
+                        CookieName = "language"
+                    };
+                    options.RequestCultureProviders.Insert(0, provider);
+                });
 
             // DI - Repositories
             services.AddScoped<IEventRepository, EventRepository>();
@@ -61,6 +103,9 @@ namespace MeetingPlanner
             // E-mail connection metadata
             var connectionMetadata = Configuration.GetSection("ConnectionMetadata").Get<ConnectionMetadata>();
             services.AddSingleton(connectionMetadata);
+
+            // Localization service
+            services.AddSingleton<LocalizationService>();
 
             // Quartz services
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
@@ -103,6 +148,10 @@ namespace MeetingPlanner
                 app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            // Use localization / culture to translate Razor Pages
+            app.UseRequestLocalization(app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value);
+            
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
@@ -118,7 +167,7 @@ namespace MeetingPlanner
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-            
+
                 if (env.IsDevelopment())
                     spa.UseAngularCliServer(npmScript: "start");
             });

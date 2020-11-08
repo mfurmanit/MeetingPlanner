@@ -1,20 +1,22 @@
 <ul class="navbar-nav" *ngIf="isAuthenticated | async">
-    <li class="nav-item">
-        <a class="nav-link text-dark" [routerLink]='["/authentication/profile"]'
-           [title]="'common.profile' | translate | capitalize">
-          {{ 'common.profile' | translate | capitalize }} - {{ userName | async }}</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" [routerLink]='["/authentication/logout"]' [state]='{ local: true }'
-            [title]="'common.logout' | translate | capitalize">
-          {{ 'common.logout' | translate | capitalize }}</a>
-    </li>
+  <li class="nav-item">
+    <mat-icon role="tooltip" [matTooltip]="'messages.profileInfo' | translate: {username: (userName | async)}">
+      account_circle
+    </mat-icon>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-dark" [routerLink]='["/authentication/logout"]' [state]='{ local: true }'
+       [title]="'common.logout' | translate | capitalize">
+      {{ 'common.logout' | translate | capitalize }}</a>
+  </li>
 </ul>
 <ul class="navbar-nav" *ngIf="!(isAuthenticated | async)">
   <li class="nav-item">
-        <a class="nav-link text-dark" [routerLink]='["/authentication/register"]'>{{ 'common.register' | translate | capitalize }}</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" [routerLink]='["/authentication/login"]'>{{ 'common.login' | translate | capitalize }}</a>
-    </li>
+    <a class="nav-link text-dark"
+       [routerLink]='["/authentication/register"]'>{{ 'common.register' | translate | capitalize }}</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-dark"
+       [routerLink]='["/authentication/login"]'>{{ 'common.login' | translate | capitalize }}</a>
+  </li>
 </ul>

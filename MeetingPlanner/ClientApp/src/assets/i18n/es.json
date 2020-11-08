@@ -41,13 +41,13 @@
     "unitsInfo": "Los minutos y las horas (como unidades) solo se pueden seleccionar después de ingresar la fecha de inicio de la reunión.",
     "eventDeletionHeader": "Eliminando una cita",
     "eventDeletionContent": "Esta operación es irreversible. ¿Está seguro de que desea eliminar la reunión seleccionada?",
-    "eventDeleted": "La cita ha sido eliminada."
+    "eventDeleted": "La cita ha sido eliminada.",
+    "profileInfo": "Accedí como {{username}}"
   },
   "common": {
-    "login": "Registrarse",
+    "login": "Iniciar sesión",
     "register": "Registro",
     "logout": "Cerrar sesión",
-    "profile": "Perfil",
     "globalEvents": "Reuniones generales",
     "personalEvents": "Reuniones privadas",
     "language": "Idioma",
