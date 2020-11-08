@@ -3,7 +3,10 @@ import { AuthenticationResultStatus, AuthorizeService } from '../authorize.servi
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
+import { ApplicationPaths, LogoutActions, ReturnUrlType } from '../api-authorization.constants';
+import { SnackBarService } from '../../app/shared/services';
+import { TranslateService } from '@ngx-translate/core';
+import { handleGlobalFailure } from '../../app/shared/helpers/application.helper';
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -14,12 +17,14 @@ import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authoriza
   styleUrls: ['./logout.component.scss']
 })
 export class LogoutComponent implements OnInit {
-  public message = new BehaviorSubject<string>(null);
 
-  constructor(
-    private authorizeService: AuthorizeService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router) { }
+  constructor(private authorizeService: AuthorizeService,
+              private activatedRoute: ActivatedRoute,
+              private snackBarService: SnackBarService,
+              private translateService: TranslateService,
+              private router: Router) {
+    this.snackBarService.translate(translateService);
+  }
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
@@ -29,7 +34,7 @@ export class LogoutComponent implements OnInit {
           await this.logout(this.getReturnUrl());
         } else {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
-          this.message.next('The logout was not initiated from within the page.');
+          handleGlobalFailure('The logout was not initiated from within the page.', this.router);
         }
 
         break;
@@ -37,7 +42,7 @@ export class LogoutComponent implements OnInit {
         await this.processLogoutCallback();
         break;
       case LogoutActions.LoggedOut:
-        this.message.next('You successfully logged out!');
+        this.redirectAfterLogout();
         break;
       default:
         throw new Error(`Invalid action '${action}'`);
@@ -46,10 +51,10 @@ export class LogoutComponent implements OnInit {
 
   private async logout(returnUrl: string): Promise<void> {
     const state: INavigationState = { returnUrl };
-    const isauthenticated = await this.authorizeService.isAuthenticated().pipe(
+    const isAuthenticated = await this.authorizeService.isAuthenticated().pipe(
       take(1)
     ).toPromise();
-    if (isauthenticated) {
+    if (isAuthenticated) {
       const result = await this.authorizeService.signOut(state);
       switch (result.status) {
         case AuthenticationResultStatus.Redirect:
@@ -58,13 +63,11 @@ export class LogoutComponent implements OnInit {
           await this.navigateToReturnUrl(returnUrl);
           break;
         case AuthenticationResultStatus.Fail:
-          this.message.next(result.message);
+          handleGlobalFailure(result.message, this.router);
           break;
         default:
           throw new Error('Invalid authentication result status.');
       }
-    } else {
-      this.message.next('You successfully logged out!');
     }
   }
 
@@ -75,12 +78,13 @@ export class LogoutComponent implements OnInit {
       case AuthenticationResultStatus.Redirect:
         // There should not be any redirects as the only time completeAuthentication finishes
         // is when we are doing a redirect sign in flow.
-        throw new Error('Should not redirect.');
+        handleGlobalFailure('Should not redirect.', this.router);
+        break;
       case AuthenticationResultStatus.Success:
         await this.navigateToReturnUrl(this.getReturnUrl(result.state));
         break;
       case AuthenticationResultStatus.Fail:
-        this.message.next(result.message);
+        handleGlobalFailure(result.message, this.router);
         break;
       default:
         throw new Error('Invalid authentication result status.');
@@ -101,11 +105,19 @@ export class LogoutComponent implements OnInit {
       !(fromQuery.startsWith(`${window.location.origin}/`) ||
         /\/[^\/].*/.test(fromQuery))) {
       // This is an extra check to prevent open redirects.
-      throw new Error('Invalid return url. The return url needs to have the same origin as the current page.');
+      handleGlobalFailure('Invalid return url. The return url needs to have the same origin as the current page.', this.router);
     }
     return (state && state.returnUrl) ||
       fromQuery ||
       ApplicationPaths.LoggedOut;
+  }
+
+  private redirectAfterLogout(): void {
+    this.router.navigate(['/planner/global']).then(() => {
+      this.translateService.get('messages.logoutSuccessful').subscribe(translation => {
+        this.snackBarService.openSnackBar(translation, true, false);
+      });
+    });
   }
 }
 

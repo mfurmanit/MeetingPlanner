@@ -12,10 +12,16 @@ namespace MeetingPlanner.Others.Utils
                 dateTime.Minute, 0, 0, dateTime.Kind);
         }
 
-        public static void ValidateEventDate(DateTime dateTime)
+        public static void ValidateEventDateOnCreate(DateTime dateTime)
         {
             if (StartOfDay(dateTime) < StartOfDay(DateTime.Now))
-                throw new ArgumentException("Nie można tworzyć i modyfikować spotkań posiadających datę wcześniejszą niż dzisiejsza!");
+                throw new ArgumentException("Nie można tworzyć spotkań posiadających datę wcześniejszą niż dzisiejsza!");
+        }
+
+        public static void ValidateEventDateOnUpdate(DateTime requestDateTime, DateTime dbDateTime)
+        {
+            if (requestDateTime != dbDateTime && StartOfDay(requestDateTime) < StartOfDay(DateTime.Now))
+                throw new ArgumentException("Data spotkania może zostać zaktualizowana wyłącznie na późniejszą niż dzisiejsza!");
         }
 
         public static DateTime StartOfDay(DateTime dateTime)

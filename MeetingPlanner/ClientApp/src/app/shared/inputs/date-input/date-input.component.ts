@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { APP_DATE_FORMATS, DateHelper } from '../../helpers/date.helper';
 import { Subscription } from 'rxjs';
 import { ApplicationService } from '../../services';
 import { TranslateService } from '@ngx-translate/core';
+import { isNullOrUndefined, startOfDay } from '../../helpers/application.helper';
 
 @Component({
   selector: 'app-date-input',
@@ -22,15 +23,19 @@ export class DateInputComponent {
   @Input() placeholderToTranslate: string;
   @Input() tooltip: string;
   @Input() required: boolean = false;
-  @Input() minDate: Date;
-  @Input() maxDate: Date;
+  @Input() chosenDate: Date;
 
-  subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
 
   constructor(private dateAdapter: DateAdapter<Date>,
               private appService: ApplicationService,
               private translate: TranslateService) {
     this.listenForLanguageChange();
+  }
+
+  customDateFilter = (date: Date): boolean => {
+    return date >= startOfDay(new Date()) ||
+      (!isNullOrUndefined(this.chosenDate) && startOfDay(date).toDateString() === startOfDay(this.chosenDate).toDateString());
   }
 
   private listenForLanguageChange(): void {

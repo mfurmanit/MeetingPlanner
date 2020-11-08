@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { User, UserManager, WebStorageStateStore } from 'oidc-client';
+import { User, UserManager } from 'oidc-client';
 import { BehaviorSubject, concat, from, Observable } from 'rxjs';
 import { filter, map, mergeMap, take, tap } from 'rxjs/operators';
-import { ApplicationPaths, ApplicationName } from './api-authorization.constants';
+import { ApplicationName, ApplicationPaths } from './api-authorization.constants';
 
 export type IAuthenticationResult =
   SuccessAuthenticationResult |
@@ -40,7 +40,6 @@ export class AuthorizeService {
   // By default pop ups are disabled because they don't work properly on Edge.
   // If you want to enable pop up authentication simply set this flag to false.
 
-  private popUpDisabled = true;
   private userManager: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
 
@@ -81,28 +80,11 @@ export class AuthorizeService {
       console.log('Silent authentication error: ', silentError);
 
       try {
-        if (this.popUpDisabled) {
-          throw new Error('Popup disabled. Change \'authorize.service.ts:AuthorizeService.popupDisabled\' to false to enable it.');
-        }
-        user = await this.userManager.signinPopup(this.createArguments());
-        this.userSubject.next(user.profile);
-        return this.success(state);
-      } catch (popupError) {
-        if (popupError.message === 'Popup window closed') {
-          // The user explicitly cancelled the login action by closing an opened popup.
-          return this.error('The user closed the window.');
-        } else if (!this.popUpDisabled) {
-          console.log('Popup authentication error: ', popupError);
-        }
-
-        // PopUps might be blocked by the user, fallback to redirect
-        try {
-          await this.userManager.signinRedirect(this.createArguments(state));
-          return this.redirect();
-        } catch (redirectError) {
-          console.log('Redirect authentication error: ', redirectError);
-          return this.error(redirectError);
-        }
+        await this.userManager.signinRedirect(this.createArguments(state));
+        return this.redirect();
+      } catch (redirectError) {
+        console.log('Redirect authentication error: ', redirectError);
+        return this.error(redirectError);
       }
     }
   }
@@ -121,23 +103,11 @@ export class AuthorizeService {
 
   public async signOut(state: any): Promise<IAuthenticationResult> {
     try {
-      if (this.popUpDisabled) {
-        throw new Error('Popup disabled. Change \'authorize.service.ts:AuthorizeService.popupDisabled\' to false to enable it.');
-      }
-
-      await this.ensureUserManagerInitialized();
-      await this.userManager.signoutPopup(this.createArguments());
-      this.userSubject.next(null);
-      return this.success(state);
-    } catch (popupSignOutError) {
-      console.log('Popup signout error: ', popupSignOutError);
-      try {
-        await this.userManager.signoutRedirect(this.createArguments(state));
-        return this.redirect();
-      } catch (redirectSignOutError) {
-        console.log('Redirect signout error: ', popupSignOutError);
-        return this.error(redirectSignOutError);
-      }
+      await this.userManager.signoutRedirect(this.createArguments(state));
+      return this.redirect();
+    } catch (redirectSignOutError) {
+      console.log('Redirect signout error: ', redirectSignOutError);
+      return this.error(redirectSignOutError);
     }
   }
 

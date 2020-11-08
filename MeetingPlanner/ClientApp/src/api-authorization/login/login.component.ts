@@ -3,6 +3,7 @@ import { AuthorizeService, AuthenticationResultStatus } from '../authorize.servi
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
+import { handleGlobalFailure } from '../../app/shared/helpers/application.helper';
 
 // The main responsibility of this component is to handle the user's login process.
 // This is the starting point for the login process. Any component that needs to authenticate
@@ -14,12 +15,11 @@ import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } fr
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  public message = new BehaviorSubject<string>(null);
 
-  constructor(
-    private authorizeService: AuthorizeService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router) { }
+  constructor(private authorizeService: AuthorizeService,
+              private activatedRoute: ActivatedRoute,
+              private router: Router) {
+  }
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
         break;
       case LoginActions.LoginFailed:
         const message = this.activatedRoute.snapshot.queryParamMap.get(QueryParameterNames.Message);
-        this.message.next(message);
+        handleGlobalFailure(message, this.router);
         break;
       case LoginActions.Profile:
         this.redirectToProfile();
@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
   private async login(returnUrl: string): Promise<void> {
     const state: INavigationState = { returnUrl };
     const result = await this.authorizeService.signIn(state);
-    this.message.next(undefined);
     switch (result.status) {
       case AuthenticationResultStatus.Redirect:
         break;
@@ -72,12 +71,13 @@ export class LoginComponent implements OnInit {
     switch (result.status) {
       case AuthenticationResultStatus.Redirect:
         // There should not be any redirects as completeSignIn never redirects.
-        throw new Error('Should not redirect.');
+        handleGlobalFailure('Should not redirect.', this.router);
+        break;
       case AuthenticationResultStatus.Success:
         await this.navigateToReturnUrl(this.getReturnUrl(result.state));
         break;
       case AuthenticationResultStatus.Fail:
-        this.message.next(result.message);
+        handleGlobalFailure(result.message, this.router);
         break;
     }
   }
@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
       !(fromQuery.startsWith(`${window.location.origin}/`) ||
         /\/[^\/].*/.test(fromQuery))) {
       // This is an extra check to prevent open redirects.
-      throw new Error('Invalid return url. The return url needs to have the same origin as the current page.');
+      handleGlobalFailure('Invalid return url. The return url needs to have the same origin as the current page.', this.router);
     }
     return (state && state.returnUrl) ||
       fromQuery ||

@@ -1,6 +1,14 @@
-<body>
-  <app-nav-menu></app-nav-menu>
+<body *ngIf="viewInitialized">
+  <app-nav-menu *ngIf="showNavbar"></app-nav-menu>
   <div class="container">
     <router-outlet></router-outlet>
+  </div>
+</body>
+
+<body *ngIf="!viewInitialized">
+  <div class="spinner">
+    <div class="spinner-item"></div>
+    <div class="spinner-item"></div>
+    <div class="spinner-item"></div>
   </div>
 </body>

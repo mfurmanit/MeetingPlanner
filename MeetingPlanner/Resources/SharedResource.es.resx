@@ -135,6 +135,9 @@
   <data name="emailRequired" xml:space="preserve">
     <value>La direccion de correo electronico es un campo requerido.</value>
   </data>
+  <data name="invalidLoginAttempt" xml:space="preserve">
+    <value>Error de inicio de sesion. Verifique que la dirección de correo electrónico y la contraseña ingresadas sean correctas.</value>
+  </data>
   <data name="login" xml:space="preserve">
     <value>Iniciar sesión</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="register" xml:space="preserve">
     <value>Registro</value>
+  </data>
+  <data name="registerButton" xml:space="preserve">
+    <value>Registrarse</value>
+  </data>
+  <data name="loginButton" xml:space="preserve">
+    <value>Iniciar sesió</value>
   </data>
   <data name="registerNewUser" xml:space="preserve">
     <value>Crear una nueva cuenta</value>

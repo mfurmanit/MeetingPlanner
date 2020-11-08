@@ -42,7 +42,8 @@
     "eventDeletionHeader": "Deleting an appointment",
     "eventDeletionContent": "This operation is irreversible. Are you sure you want to delete the selected meeting?",
     "eventDeleted": "The appointment has been deleted.",
-    "profileInfo": "Logged in as {{username}}"
+    "profileInfo": "Logged in as {{username}}",
+    "logoutSuccessful": "You have been successfully logged out!"
   },
   "common": {
     "login": "Login",

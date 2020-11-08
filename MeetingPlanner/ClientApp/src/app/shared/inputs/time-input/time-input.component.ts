@@ -16,18 +16,18 @@ export class TimeInputComponent {
   @Input() cssClass: string = 'field';
   @Input() required = false;
 
-  ngoTheme: NgxMaterialTimepickerTheme = {
+  theme: NgxMaterialTimepickerTheme = {
     container: {
       bodyBackgroundColor: '#fff',
       primaryFontFamily: 'Roboto, sans-serif'
     },
     dial: {
-      dialBackgroundColor: '#c2185b',
+      dialBackgroundColor: '#556df2',
       dialActiveColor: '#fff',
       dialInactiveColor: '#fff'
     },
     clockFace: {
-      clockFaceBackgroundColor: '#c2185b',
+      clockFaceBackgroundColor: '#556df2',
       clockHandColor: '#fff',
       clockFaceTimeInactiveColor: '#fff',
       clockFaceInnerTimeInactiveColor: '#fff',
