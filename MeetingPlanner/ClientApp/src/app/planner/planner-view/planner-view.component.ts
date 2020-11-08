@@ -93,6 +93,7 @@ export class PlannerViewComponent implements OnInit, OnDestroy {
   }
 
   viewDateChange(): void {
+    this.activeDayIsOpen = false;
     this.getEvents();
   }
 
