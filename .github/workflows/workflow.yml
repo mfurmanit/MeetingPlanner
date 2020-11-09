@@ -3,8 +3,7 @@ name: Deploy MeetingPlanner to Azure
 on:
   push:
     branches:
-      #- master
-      - development
+      - master
 
 env:
   AZURE_WEBAPP_NAME: MeetingPlanner
@@ -14,16 +13,13 @@ jobs:
   build:
     name: Build and Deploy MeetingPlanner
     runs-on: ubuntu-latest
-    #defaults:
-      #run:
-        #working-directory: ./MeetingPlanner
+    defaults:
+      run:
+        working-directory: ./MeetingPlanner
     steps:
 
       # Checkout the repository
-      # - uses: actions/checkout@master
-      - uses: actions/checkout@v2
-        with:
-          ref: development
+      - uses: actions/checkout@master
       
       # Setup .NET Core SDK
       - name: Setup .NET Core
@@ -34,21 +30,18 @@ jobs:
       # Run dotnet restore
       - name: Restore
         run: dotnet restore
-        working-directory: ./MeetingPlanner
       
       # Run dotnet build
       - name: Build
         run: dotnet build --no-restore -c Release
-        working-directory: ./MeetingPlanner
         
       # Run dotnet tests
       - name: Run tests
-        run: dotnet test
+        working-directory: ./MeetingPlanner.Tests
         
       # Run dotnet publish  
       - name: Publish
         run: dotnet publish --no-build -c Release --output ${{env.DOTNET_ROOT}}/MeetingPlanner
-        working-directory: ./MeetingPlanner
           
       # Deploy to Azure Web apps
       - name: 'Deploy to Azure WebApp'
