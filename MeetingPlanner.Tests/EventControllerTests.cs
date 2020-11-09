@@ -66,7 +66,7 @@ namespace MeetingPlanner.Tests
 
             using var scope = _factory.Server.Host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            Assert.Equal(0, context.Events.Count());
+            Assert.Equal(1, context.Events.Count());
         }
 
         [Theory]
