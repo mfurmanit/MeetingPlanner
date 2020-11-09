@@ -93,7 +93,7 @@ namespace MeetingPlanner.Services
             var stateChanged = false;
 
             if (dbEvent.Global && !request.Global)
-                throw new ArgumentException("Nie można zmienić wydarzenia ogólnego na prywatne!");
+                throw new ArgumentException("Nie można zmienić spotkania ogólnego na prywatne!");
 
             if (!dbEvent.Global && request.Global) // Changing personal event to global event
             {

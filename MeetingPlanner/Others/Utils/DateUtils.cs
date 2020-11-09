@@ -38,6 +38,7 @@ namespace MeetingPlanner.Others.Utils
                 DateTo = EndOfNextMonth(dateTime)
             };
         }
+
         private static DateTime StartOfPreviousMonth(DateTime dateTime)
         {
             var month = dateTime.Month;
