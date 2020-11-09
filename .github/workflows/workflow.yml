@@ -19,9 +19,7 @@ jobs:
     steps:
 
       # Checkout the repository
-      - uses: actions/checkout@v2
-        with:
-          ref: development
+      - uses: actions/checkout@master
       
       # Setup .NET Core SDK
       - name: Setup .NET Core
@@ -36,6 +34,11 @@ jobs:
       # Run dotnet build
       - name: Build
         run: dotnet build --no-restore -c Release
+        
+      # Run dotnet tests
+      - name: Run tests
+        run: dotnet test --no-restore -c Release
+        working-directory: ./MeetingPlanner.Tests
         
       # Run dotnet publish  
       - name: Publish

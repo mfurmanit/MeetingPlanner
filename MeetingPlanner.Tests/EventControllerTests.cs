@@ -10,6 +10,7 @@ using MeetingPlanner.Dto;
 using MeetingPlanner.Tests.Fixtures;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -28,6 +29,10 @@ namespace MeetingPlanner.Tests
 
             _factory = factory.WithWebHostBuilder(builder =>
             {
+                builder.ConfigureServices(services => services
+                    .AddDbContext<ApplicationDbContext>(options => options
+                        .UseInMemoryDatabase("MeetingPlannerTestDatabase")));
+
                 builder.UseSolutionRelativeContentRoot("MeetingPlanner");
 
                 builder.ConfigureAppConfiguration((conf, confBuilder) => confBuilder.AddJsonFile(configPath));
