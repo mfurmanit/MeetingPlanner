@@ -33,8 +33,9 @@ namespace MeetingPlanner.Others.Scheduling
             {
                 var job = CreateJob(jobSchedule);
                 var trigger = CreateTrigger(jobSchedule);
-
-                await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                
+                if (!Scheduler.CheckExists(job.Key, cancellationToken).Result)
+                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);
             }
 
             await Scheduler.Start(cancellationToken);
