@@ -43,7 +43,7 @@ jobs:
         
       # Run dotnet tests
       - name: Run tests
-        run: dotnet test --no-restore
+        run: dotnet test
         
       # Run dotnet publish  
       - name: Publish
