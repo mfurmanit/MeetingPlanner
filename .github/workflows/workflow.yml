@@ -43,7 +43,7 @@ jobs:
         
       # Run dotnet tests
       - name: Run tests
-        run: dotnet test --no-restore -c Release
+        run: dotnet test --no-restore
         working-directory: ./MeetingPlanner.Tests
         
       # Run dotnet publish  
