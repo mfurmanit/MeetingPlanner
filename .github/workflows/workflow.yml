@@ -37,6 +37,7 @@ jobs:
         
       # Run dotnet tests
       - name: Run tests
+        run: dotnet test
         working-directory: ./MeetingPlanner.Tests
         
       # Run dotnet publish  
