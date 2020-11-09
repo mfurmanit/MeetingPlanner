@@ -13,9 +13,9 @@ jobs:
   build:
     name: Build and Deploy MeetingPlanner
     runs-on: ubuntu-latest
-    #defaults:
-      #run:
-        #working-directory: ./MeetingPlanner
+    defaults:
+      run:
+        working-directory: ./MeetingPlanner
     steps:
 
       # Checkout the repository
@@ -24,34 +24,28 @@ jobs:
       # Setup .NET Core SDK
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
-        working-directory: ./MeetingPlanner
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }} 
           
       # Run dotnet restore
       - name: Restore
         run: dotnet restore
-        working-directory: ./MeetingPlanner
       
       # Run dotnet build
       - name: Build
         run: dotnet build --no-restore -c Release
-        working-directory: ./MeetingPlanner
         
       # Run dotnet tests
       - name: Run tests
-        run: dotnet test --no-restore -c Release
         working-directory: ./MeetingPlanner.Tests
         
       # Run dotnet publish  
       - name: Publish
         run: dotnet publish --no-build -c Release --output ${{env.DOTNET_ROOT}}/MeetingPlanner
-        working-directory: ./MeetingPlanner
           
       # Deploy to Azure Web apps
       - name: 'Deploy to Azure WebApp'
         uses: azure/webapps-deploy@v2
-        working-directory: ./MeetingPlanner
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}

@@ -31,7 +31,7 @@ namespace MeetingPlanner.Tests
             {
                 builder.ConfigureServices(services => services
                     .AddDbContext<ApplicationDbContext>(options => options
-                        .UseInMemoryDatabase("MeetingPlannerTestDatabase")));
+                    .UseInMemoryDatabase("MeetingPlannerTestDatabase")));
 
                 builder.UseSolutionRelativeContentRoot("MeetingPlanner");
 
