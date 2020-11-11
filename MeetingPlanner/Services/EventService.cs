@@ -7,6 +7,7 @@ using MeetingPlanner.Models;
 using MeetingPlanner.Others.Exceptions;
 using MeetingPlanner.Others.Utils;
 using MeetingPlanner.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace MeetingPlanner.Services
 {
@@ -15,17 +16,22 @@ namespace MeetingPlanner.Services
         private readonly IUserService _userService;
         private readonly IEventRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ILogger<EventService> _logger;
 
-        public EventService(IUserService userService, IEventRepository repository, IMapper mapper)
+        public EventService(IUserService userService, IEventRepository repository,
+            IMapper mapper, ILogger<EventService> logger)
         {
             _userService = userService;
             _repository = repository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public IEnumerable<EventResponse> GetAllPersonal(DateTime date, ClaimsPrincipal userContext)
         {
             var userId = _userService.GetUserId(userContext);
+            _logger.LogInformation($"UserContext in GetAllPersonal is '{userContext}'.");
+            _logger.LogInformation($"Found user identifier in GetAllPersonal is '{userId}'.");
             var events = _repository.GetAllPersonal(DateUtils.GetDateRange(date), userId);
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
@@ -70,6 +76,8 @@ namespace MeetingPlanner.Services
             var eventObject = _mapper.Map<Event>(request);
             var mappedObject = _mapper.Map<Event>(eventObject);
 
+            _logger.LogInformation($"UserContext in Create is '{userContext}'.");
+
             if (!mappedObject.Global)
                 mappedObject.User = _userService.GetUser(userContext);
 
@@ -108,6 +116,8 @@ namespace MeetingPlanner.Services
                 dbEvent = request.Global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
                 mappedObject = _mapper.Map(request, dbEvent);
             }
+
+            _logger.LogInformation($"UserContext in Create is '{userContext}'.");
 
             if (!mappedObject.Global)
                 mappedObject.User = _userService.GetUser(userContext);
