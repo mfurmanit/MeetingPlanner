@@ -15,7 +15,7 @@ namespace MeetingPlanner.Others.Localization
         {
             if (httpContext == null)
             {
-                throw new ArgumentNullException(nameof(httpContext));
+                throw new ArgumentException(nameof(httpContext));
             }
 
             var cookie = httpContext.Request.Cookies[CookieName];

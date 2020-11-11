@@ -74,7 +74,7 @@ namespace MeetingPlanner.Services
                 mappedObject.User = _userService.GetUser(userContext);
 
             if (!mappedObject.Global && mappedObject.User == null)
-                throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
+                throw new ArgumentException("Spotkanie prywatne musi być przypisane do użytkownika.");
 
             var createdEvent = _repository.Add(mappedObject);
             return _mapper.Map<EventResponse>(createdEvent);
@@ -113,7 +113,7 @@ namespace MeetingPlanner.Services
                 mappedObject.User = _userService.GetUser(userContext);
 
             if (!mappedObject.Global && mappedObject.User == null)
-                throw new ArgumentNullException("Spotkanie prywatne musi być przypisane do użytkownika.");
+                throw new ArgumentException("Spotkanie prywatne musi być przypisane do użytkownika.");
 
             var updatedEvent = _repository.Update(mappedObject, stateChanged);
             return _mapper.Map<EventResponse>(updatedEvent);
