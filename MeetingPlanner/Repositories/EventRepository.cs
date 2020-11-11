@@ -72,7 +72,7 @@ namespace MeetingPlanner.Repositories
         public Event Update(Event eventObject, bool stateChanged)
         {
             if (eventObject == null)
-                throw new ArgumentNullException("Przekazany argument nie może być pusty!");
+                throw new ArgumentException("Przekazany argument nie może być pusty!");
 
             RemoveNotifications(eventObject, stateChanged);
             _context.Events.Update(eventObject);
@@ -84,7 +84,7 @@ namespace MeetingPlanner.Repositories
         public Event Add(Event eventObject)
         {
             if (eventObject == null)
-                throw new ArgumentNullException("Przekazany argument nie może być pusty!");
+                throw new ArgumentException("Przekazany argument nie może być pusty!");
 
             _context.Events.Add(eventObject);
             _context.SaveChanges();
@@ -95,7 +95,7 @@ namespace MeetingPlanner.Repositories
         public void Delete(Event eventObject)
         {
             if (eventObject == null)
-                throw new ArgumentNullException("Przekazany argument nie może być pusty!");
+                throw new ArgumentException("Przekazany argument nie może być pusty!");
 
             if (!eventObject.Global && !eventObject.Notifications.IsNullOrEmpty()) 
                 _context.Notifications.RemoveRange(eventObject.Notifications);
