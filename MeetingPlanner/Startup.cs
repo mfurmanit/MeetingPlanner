@@ -116,7 +116,7 @@ namespace MeetingPlanner
             services.AddSingleton<NotificationsJob>();
             services.AddSingleton(new JobSchedule(
                 typeof(NotificationsJob),
-                "0 * * ? * *")); // run every minute
+                Configuration.GetValue<string>("NotificationsCronExpression")));
 
             // Adding AutoMapper ( ModelMapper from Utils )
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

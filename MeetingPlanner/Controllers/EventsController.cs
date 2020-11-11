@@ -26,14 +26,14 @@ namespace MeetingPlanner.Controllers
             return _service.GetAllPersonal(date, HttpContext.User);
         }
 
-        // GET: api/global-events
+        // GET: api/events/global
         [HttpGet("global")]
         public IEnumerable<EventResponse> GetAllGlobal([FromQuery(Name = "date")] DateTime date)
         {
             return _service.GetAllGlobal(date);
         }
 
-        // GET api/events/{id}
+        // GET: api/events/{id}
         [Authorize]
         [HttpGet("{id}")]
         public EventResponse Get(string id)
@@ -41,28 +41,28 @@ namespace MeetingPlanner.Controllers
             return _service.GetOneById(id, false, HttpContext.User);
         }
 
-        // GET api/global-events/{id}
+        // GET: api/events/global/{id}
         [HttpGet("global/{id}")]
         public EventResponse GetGlobal(string id)
         {
             return _service.GetOneById(id, true, null);
         }
 
-        // POST api/events
+        // POST: api/events
         [HttpPost]
         public EventResponse Post([FromBody] EventRequest request)
         {
             return _service.Create(request, HttpContext.User);
         }
 
-        // PUT api/events/{id}
+        // PUT: api/events/{id}
         [HttpPut("{id}")]
         public EventResponse Put(string id, [FromBody] EventRequest request)
         {
             return _service.Update(id, request, HttpContext.User);
         }
 
-        // DELETE api/events/{id}
+        // DELETE: api/events/{id}
         [HttpDelete("{id}")]
         public void Delete(string id)
         {

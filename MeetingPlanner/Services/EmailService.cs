@@ -1,8 +1,8 @@
-﻿using System;
-using IdentityServer4.Extensions;
+﻿using IdentityServer4.Extensions;
 using MailKit.Net.Smtp;
 using MeetingPlanner.Dto;
 using MeetingPlanner.Models;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace MeetingPlanner.Services
@@ -10,13 +10,15 @@ namespace MeetingPlanner.Services
     public class EmailService : IEmailService
     {
         private readonly ConnectionMetadata _connectionMetadata;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(ConnectionMetadata connectionMetadata)
+        public EmailService(ConnectionMetadata connectionMetadata, ILogger<EmailService> logger)
         {
             _connectionMetadata = connectionMetadata;
+            _logger = logger;
         }
 
-        private String ResolveNotificationContent(Event eventObject)
+        private string ResolveNotificationContent(Event eventObject)
         {
             var content = " ";
 
@@ -30,7 +32,7 @@ namespace MeetingPlanner.Services
             }
 
             return $"W dniu {eventObject.Date.ToShortDateString()}{content}odbędzie się spotkanie zatytuowane '{eventObject.Title}'." +
-                   $" Przejdź do kalendarza, aby wyświetlić szczegóły.";
+                   " Przejdź do kalendarza, aby wyświetlić szczegóły.";
         }
 
         private EmailMessage PrepareEmailMessage(Event eventObject)
@@ -46,6 +48,7 @@ namespace MeetingPlanner.Services
 
         private MimeMessage CreateMimeMessageFromEmailMessage(EmailMessage message)
         {
+            _logger.LogInformation($"Creating e-mail message to {message.Receiver?.Address}.");
             var mimeMessage = new MimeMessage();
             mimeMessage.From.Add(message.Sender);
             mimeMessage.To.Add(message.Receiver);
@@ -58,6 +61,7 @@ namespace MeetingPlanner.Services
         public void SendNotification(Event eventObject)
         {
             var mimeMessage = CreateMimeMessageFromEmailMessage(PrepareEmailMessage(eventObject));
+            _logger.LogInformation("Sending created e-mail message.");
             using SmtpClient smtpClient = new SmtpClient();
             smtpClient.Connect(_connectionMetadata.SmtpServer,
                 _connectionMetadata.Port, true);

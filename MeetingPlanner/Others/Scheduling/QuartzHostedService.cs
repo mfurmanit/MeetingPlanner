@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Spi;
 
@@ -12,15 +13,18 @@ namespace MeetingPlanner.Others.Scheduling
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly IJobFactory _jobFactory;
         private readonly IEnumerable<JobSchedule> _jobSchedules;
+        private readonly ILogger<QuartzHostedService> _logger;
 
         public QuartzHostedService(
             ISchedulerFactory schedulerFactory,
             IJobFactory jobFactory,
-            IEnumerable<JobSchedule> jobSchedules)
+            IEnumerable<JobSchedule> jobSchedules,
+            ILogger<QuartzHostedService> logger)
         {
             _schedulerFactory = schedulerFactory;
             _jobSchedules = jobSchedules;
             _jobFactory = jobFactory;
+            _logger = logger;
         }
         public IScheduler Scheduler { get; set; }
 
@@ -33,9 +37,11 @@ namespace MeetingPlanner.Others.Scheduling
             {
                 var job = CreateJob(jobSchedule);
                 var trigger = CreateTrigger(jobSchedule);
+
+                if (Scheduler.CheckExists(job.Key, cancellationToken).Result) continue;
                 
-                if (!Scheduler.CheckExists(job.Key, cancellationToken).Result)
-                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                _logger.LogInformation($"Scheduling job '{jobSchedule.JobType}' with cron expression '{jobSchedule.CronExpression}'.");
             }
 
             await Scheduler.Start(cancellationToken);

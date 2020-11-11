@@ -30,14 +30,14 @@ namespace MeetingPlanner.Services
         public IEnumerable<EventResponse> GetAllPersonal(DateTime date, ClaimsPrincipal userContext)
         {
             var userId = _userService.GetUserId(userContext);
-            _logger.LogInformation($"UserContext in GetAllPersonal is '{userContext}'.");
-            _logger.LogInformation($"Found user identifier in GetAllPersonal is '{userId}'.");
+            _logger.LogInformation($"Method call - Get personal events for user with id '{userId}'.");
             var events = _repository.GetAllPersonal(DateUtils.GetDateRange(date), userId);
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
 
         public IEnumerable<EventResponse> GetAllGlobal(DateTime date)
         {
+            _logger.LogInformation("Method call - Get global events.");
             var events = _repository.GetAllGlobal(DateUtils.GetDateRange(date));
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
@@ -45,6 +45,8 @@ namespace MeetingPlanner.Services
         #nullable enable
         public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext)
         {
+            _logger.LogInformation($"Method call - Get event with id '{id}'.");
+
             var eventObject = global ? _repository.GetOneGlobal(id) : _repository.GetOnePersonal(id);
 
             if (eventObject == null)
@@ -68,6 +70,8 @@ namespace MeetingPlanner.Services
 
         public EventResponse Create(EventRequest request, ClaimsPrincipal userContext)
         {
+            _logger.LogInformation($"Method call - Create new event with title '{request.Title}'.");
+
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
             TimeUtils.ValidateBothHours(request.HourFrom, request.HourTo);
@@ -76,13 +80,15 @@ namespace MeetingPlanner.Services
             var eventObject = _mapper.Map<Event>(request);
             var mappedObject = _mapper.Map<Event>(eventObject);
 
-            _logger.LogInformation($"UserContext in Create is '{userContext}'.");
-
             if (!mappedObject.Global)
                 mappedObject.User = _userService.GetUser(userContext);
 
             if (!mappedObject.Global && mappedObject.User == null)
                 throw new ArgumentException("Spotkanie prywatne musi być przypisane do użytkownika.");
+
+            _logger.LogInformation(!mappedObject.Global
+                ? $"Creating personal event ( '{mappedObject.Title}' ) for user with id '{mappedObject.User.Id}'."
+                : $"Creating global event ( '{mappedObject.Title}' ).");
 
             var createdEvent = _repository.Add(mappedObject);
             return _mapper.Map<EventResponse>(createdEvent);
@@ -90,6 +96,8 @@ namespace MeetingPlanner.Services
 
         public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext)
         {
+            _logger.LogInformation($"Method call - Update existing event with id '{id}'.");
+
             TimeUtils.ValidateHourFormat(request.HourFrom);
             TimeUtils.ValidateHourFormat(request.HourTo);
             TimeUtils.ValidateBothHours(request.HourFrom, request.HourTo);
@@ -117,13 +125,15 @@ namespace MeetingPlanner.Services
                 mappedObject = _mapper.Map(request, dbEvent);
             }
 
-            _logger.LogInformation($"UserContext in Create is '{userContext}'.");
-
             if (!mappedObject.Global)
                 mappedObject.User = _userService.GetUser(userContext);
 
             if (!mappedObject.Global && mappedObject.User == null)
                 throw new ArgumentException("Spotkanie prywatne musi być przypisane do użytkownika.");
+
+            _logger.LogInformation(!mappedObject.Global
+                ? $"Updating personal event ( '{mappedObject.Title}' - {mappedObject.Id} ) for user with id '{mappedObject.User?.Id}'."
+                : $"Updating global event ( '{mappedObject.Title}' - {mappedObject.Id} ).");
 
             var updatedEvent = _repository.Update(mappedObject, stateChanged);
             return _mapper.Map<EventResponse>(updatedEvent);
@@ -131,6 +141,7 @@ namespace MeetingPlanner.Services
 
         public void Delete(string id)
         {
+            _logger.LogInformation($"Method call - Delete existing event with id '{id}'.");
             var dbEvent = _repository.GetOneWithNotifications(id);
             _repository.Delete(dbEvent);
         }

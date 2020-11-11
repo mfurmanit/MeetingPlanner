@@ -4,6 +4,6 @@ namespace MeetingPlanner.Services
 {
     public interface IEmailService
     {
-        public void SendNotification(Event eventObject);
+        void SendNotification(Event eventObject);
     }
 }

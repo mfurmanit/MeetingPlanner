@@ -7,12 +7,12 @@ namespace MeetingPlanner.Services
 {
     public interface IEventService
     {
-        public IEnumerable<EventResponse> GetAllPersonal(DateTime date, ClaimsPrincipal userContext);
-        public IEnumerable<EventResponse> GetAllGlobal(DateTime date);
+        IEnumerable<EventResponse> GetAllPersonal(DateTime date, ClaimsPrincipal userContext);
+        IEnumerable<EventResponse> GetAllGlobal(DateTime date);
         #nullable enable
-        public EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext);
-        public EventResponse Create(EventRequest request, ClaimsPrincipal userContext);
-        public EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext);
+        EventResponse GetOneById(string id, bool global, ClaimsPrincipal? userContext);
+        EventResponse Create(EventRequest request, ClaimsPrincipal userContext);
+        EventResponse Update(string id, EventRequest request, ClaimsPrincipal userContext);
         void Delete(string id);
     }
 }
