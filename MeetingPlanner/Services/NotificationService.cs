@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using IdentityServer4.Extensions;
 using MeetingPlanner.Data;
 using MeetingPlanner.Models;
 using MeetingPlanner.Others.Utils;
 using MeetingPlanner.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace MeetingPlanner.Services
 {
@@ -16,12 +16,15 @@ namespace MeetingPlanner.Services
         private readonly ApplicationDbContext _context;
         private readonly IEventRepository _eventRepository;
         private readonly IEmailService _emailService;
+        private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(ApplicationDbContext context, IEventRepository eventRepository,  IEmailService emailService)
+        public NotificationService(ApplicationDbContext context, IEventRepository eventRepository,
+            IEmailService emailService, ILogger<NotificationService> logger)
         {
             _context = context;
             _eventRepository = eventRepository;
             _emailService = emailService;
+            _logger = logger;
         }
 
         public void ResolveAndSendNotifications()
@@ -63,9 +66,10 @@ namespace MeetingPlanner.Services
         {
             if (notificationDate.ToShortDateString() == DateTime.Today.ToShortDateString())
             {
+                _logger.LogInformation($"Sending notification for event '{eventObject.Title} - {eventObject.Id}.");
                 toRemove.Add(notification);
                 _emailService.SendNotification(eventObject);
-                Debug.WriteLine("Should send notification ...");
+                _logger.LogInformation("E-mail should be sent");
             }
         }
 
@@ -74,9 +78,10 @@ namespace MeetingPlanner.Services
         {
             if (notificationDate.Equals(DateUtils.CurrentDate()))
             {
+                _logger.LogInformation($"Sending notification for event '{eventObject.Title} - {eventObject.Id}.");
                 toRemove.Add(notification);
                 _emailService.SendNotification(eventObject);
-                Debug.WriteLine("Should send notification ...");
+                _logger.LogInformation("E-mail should be sent.");
             }
         }
 

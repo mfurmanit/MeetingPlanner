@@ -13,20 +13,20 @@ namespace MeetingPlanner.Services
         public UserService(UserManager<ApplicationUser> userManager, ILogger<UserService> logger)
         {
             _userManager = userManager;
-            _logger= logger;
+            _logger = logger;
         }
 
         public ApplicationUser GetUser(ClaimsPrincipal userContext)
         {
-            var result = _userManager.FindByIdAsync(GetUserId(userContext)).Result;
-            _logger.LogInformation($"Found user username is '{result}'.");
-            return result;
+            var applicationUser = _userManager.FindByIdAsync(GetUserId(userContext)).Result;
+            _logger.LogInformation($"Found user username - '{applicationUser}'.");
+            return applicationUser;
         }
 
         public string GetUserId(ClaimsPrincipal userContext)
         {
             var userId = userContext.FindFirstValue(ClaimTypes.NameIdentifier);
-            _logger.LogInformation($"Found user identifier is '{userId}'.");
+            _logger.LogInformation($"Found user id - '{userId}'.");
             return userId;
         }
     }

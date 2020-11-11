@@ -32,7 +32,7 @@ namespace MeetingPlanner.Others.Exceptions
 
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            _logger.LogError(exception, $"Unhandled exception has occurred while executing the request on url : {context.Request.GetDisplayUrl()}");
+            _logger.LogError(exception, $"Exception has occurred while executing the request on url : {context.Request.GetDisplayUrl()}");
             
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;

@@ -14,16 +14,12 @@ namespace MeetingPlanner.Others.Localization
         public override Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext httpContext)
         {
             if (httpContext == null)
-            {
                 throw new ArgumentException(nameof(httpContext));
-            }
 
             var cookie = httpContext.Request.Cookies[CookieName];
 
             if (string.IsNullOrEmpty(cookie))
-            {
                 return NullProviderCultureResult;
-            }
 
             var providerResultCulture = ParseCookieValue(cookie);
 
@@ -32,8 +28,7 @@ namespace MeetingPlanner.Others.Localization
 
         public static ProviderCultureResult ParseCookieValue(string value)
         {
-            if (string.IsNullOrWhiteSpace(value)) return null;
-            return new ProviderCultureResult(value, value);
+            return string.IsNullOrWhiteSpace(value) ? null : new ProviderCultureResult(value, value);
         }
     }
 }

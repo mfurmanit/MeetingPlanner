@@ -2,6 +2,6 @@
 {
     public interface INotificationService
     {
-        public void ResolveAndSendNotifications();
+        void ResolveAndSendNotifications();
     }
 }

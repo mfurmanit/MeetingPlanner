@@ -5,7 +5,7 @@ namespace MeetingPlanner.Services
 {
     public interface IUserService
     {
-        public ApplicationUser GetUser(ClaimsPrincipal userContext);
-        public string GetUserId(ClaimsPrincipal userContext);
+        ApplicationUser GetUser(ClaimsPrincipal userContext);
+        string GetUserId(ClaimsPrincipal userContext);
     }
 }
