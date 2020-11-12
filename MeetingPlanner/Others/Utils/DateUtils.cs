@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using MeetingPlanner.Dto;
 
 namespace MeetingPlanner.Others.Utils
@@ -22,6 +23,14 @@ namespace MeetingPlanner.Others.Utils
         {
             if (requestDateTime != dbDateTime && StartOfDay(requestDateTime) < StartOfDay(DateTime.Now))
                 throw new ArgumentException("Data spotkania może zostać zaktualizowana wyłącznie na późniejszą niż dzisiejsza!");
+        }
+
+        public static void ValidateQueryParamDate(DateTime date)
+        {
+            Match match = Regex.Match(date.ToShortDateString(), @"^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$", RegexOptions.IgnoreCase);
+
+            if (!match.Success)
+                throw new ArgumentException("Pobranie spotkań jest możliwe tylko w przypadku podania właściwego formatu daty w parametrze żądania!");
         }
 
         public static DateTime StartOfDay(DateTime dateTime)
