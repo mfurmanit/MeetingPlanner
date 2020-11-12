@@ -41,9 +41,14 @@ All appointments appear as blue dots in the calendar view. On hover you can see 
   Expand to show images!
 </summary>
   <img src="readme/1%20-%20global calendar.png" width="1000px" /> <br />
+  <hr style="margin-top: 20px; margin-bottom: 20px;"/>
   <img src="readme/2%20-%20global meeting details.png" width="1000px" /> <br />
+  <hr style="margin-top: 20px; margin-bottom: 20px;"/>
   <img src="readme/3%20-%20languages.png" width="1000px" /> <br />
+  <hr style="margin-top: 20px; margin-bottom: 20px;"/>
   <img src="readme/4%20-%20time input.png" width="1000px" /> <br />
+  <hr style="margin-top: 20px; margin-bottom: 20px;"/>
   <img src="readme/5%20-%20private meeting details.png" width="1000px" /> <br />
+  <hr style="margin-top: 20px; margin-bottom: 20px;"/>
   <img src="readme/6%20-%20private calendar.png" width="1000px" />
 </details>
