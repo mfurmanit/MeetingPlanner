@@ -29,8 +29,10 @@ namespace MeetingPlanner.Services
 
         public IEnumerable<EventResponse> GetAllPersonal(DateTime date, ClaimsPrincipal userContext)
         {
+            _logger.LogInformation("Method call - Get personal events.");
+            DateUtils.ValidateQueryParamDate(date);
             var userId = _userService.GetUserId(userContext);
-            _logger.LogInformation($"Method call - Get personal events for user with id '{userId}'.");
+            _logger.LogInformation($"Getting personal events for user with id '{userId}'.");
             var events = _repository.GetAllPersonal(DateUtils.GetDateRange(date), userId);
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }
@@ -38,6 +40,7 @@ namespace MeetingPlanner.Services
         public IEnumerable<EventResponse> GetAllGlobal(DateTime date)
         {
             _logger.LogInformation("Method call - Get global events.");
+            DateUtils.ValidateQueryParamDate(date);
             var events = _repository.GetAllGlobal(DateUtils.GetDateRange(date));
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventResponse>>(events);
         }

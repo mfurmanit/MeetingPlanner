@@ -26,11 +26,11 @@ namespace MeetingPlanner.Others.Utils
             {
                 var timeFrom = hourFrom.Split(":");
                 var timeTo = hourTo.Split(":");
-                var secondsFrom = CountMinutes(timeFrom[0], timeFrom[1]);
-                var secondsTo = CountMinutes(timeTo[0], timeTo[1]);
+                var minutesFrom = CountMinutes(timeFrom[0], timeFrom[1]);
+                var minutesTo = CountMinutes(timeTo[0], timeTo[1]);
                 
-                if (secondsFrom > secondsTo)
-                    throw new ArgumentException("Godzina zakończenia nie może być większa niż godzina rozpoczęcia spotkania!");
+                if (minutesFrom > minutesTo)
+                    throw new ArgumentException("Godzina rozpoczęcia nie może być większa niż godzina zakończenia spotkania!");
             }
         }
 
