@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using MeetingPlanner.Dto;
 
@@ -27,8 +28,9 @@ namespace MeetingPlanner.Others.Utils
 
         public static void ValidateQueryParamDate(DateTime date)
         {
-            Match match = Regex.Match(date.ToShortDateString(), @"^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$", RegexOptions.IgnoreCase);
-
+            CultureInfo culture = new CultureInfo("pl");
+            Match match = Regex.Match(date.ToString(culture.DateTimeFormat.ShortDatePattern, culture), @"^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$", RegexOptions.IgnoreCase);
+            
             if (!match.Success)
                 throw new ArgumentException("Pobranie spotkań jest możliwe tylko w przypadku podania właściwego formatu daty w parametrze żądania!");
         }
