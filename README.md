@@ -1,4 +1,4 @@
-<img src="readme/icon.png" width="400px" href="https://fvm.ukim.edu.mk/vetnest-summerschool/wp-content/uploads/2018/11/calendars-icon.png" /> <br />
+<img  width="150" height="150" href="https://fvm.ukim.edu.mk/vetnest-summerschool/wp-content/uploads/2018/11/calendars-icon.png" src="readme/icon.png" alt="MeetingPlanner icon">
 
 # MeetingPlanner
 
