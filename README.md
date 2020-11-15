@@ -1,3 +1,5 @@
+<img  width="150" height="150" href="https://fvm.ukim.edu.mk/vetnest-summerschool/wp-content/uploads/2018/11/calendars-icon.png" src="readme/icon.png" alt="MeetingPlanner icon">
+
 # MeetingPlanner
 
 Project carried out for university subject. Web application written in ASP.NET Core 3.1 and Angular 10.
