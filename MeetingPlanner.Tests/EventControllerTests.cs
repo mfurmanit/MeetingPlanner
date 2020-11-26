@@ -147,7 +147,7 @@ namespace MeetingPlanner.Tests
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
             Assert.Equal(500, responseBody.StatusCode);
             Assert.Equal(
-                "Pobranie spotkaÒ jest moøliwe tylko w przypadku podania w≥aúciwego formatu daty w parametrze øπdania!",
+                "Pobranie spotka≈Ñ jest mo≈ºliwe tylko w przypadku podania w≈Ça≈õciwego formatu daty w parametrze ≈ºƒÖdania!",
                 responseBody.Message);
         }
 
