@@ -1,53 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using MeetingPlanner.Data;
 using MeetingPlanner.Dto;
+using MeetingPlanner.Others.Exceptions;
 using MeetingPlanner.Tests.Fixtures;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace MeetingPlanner.Tests
 {
-    public class EventControllerTests : IClassFixture<CustomWebApplicationFactory<FakeStartup>>, IDisposable
+    public class EventControllerTests : IntegrationTestBase
     {
-        private readonly WebApplicationFactory<FakeStartup> _factory;
-
-        public EventControllerTests(CustomWebApplicationFactory<FakeStartup> factory)
+        public EventControllerTests(CustomWebApplicationFactory<FakeStartup> factory) : base(factory)
         {
-            var projectDir = Directory.GetCurrentDirectory();
-            var configPath = Path.Combine(projectDir, "appsettings.Test.json");
-
-            _factory = factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureServices(services => services
-                    .AddDbContext<ApplicationDbContext>(options => options
-                    .UseInMemoryDatabase("MeetingPlannerTestDatabase")));
-
-                builder.UseSolutionRelativeContentRoot("MeetingPlanner");
-
-                builder.ConfigureAppConfiguration((conf, confBuilder) => confBuilder.AddJsonFile(configPath));
-
-                builder.ConfigureTestServices(services => services.AddMvc().AddApplicationPart(typeof(Startup).Assembly));
-            });
-        }
-
-        public void Dispose()
-        {
-            using var scope = _factory.Server.Host.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            context.Notifications.RemoveRange(context.Notifications);
-            context.Events.RemoveRange(context.Events);
-            context.SaveChanges();
         }
 
         [Theory]
@@ -55,7 +26,7 @@ namespace MeetingPlanner.Tests
         public async Task GlobalEventsGetEndpoint_ShouldReturnSuccessAndCorrectContentType(string url)
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = GetFactory().CreateClient();
 
             // Act
             var response = await client.GetAsync(url);
@@ -64,7 +35,7 @@ namespace MeetingPlanner.Tests
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
 
-            using var scope = _factory.Server.Host.Services.CreateScope();
+            using var scope = GetFactory().Server.Host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             Assert.Equal(0, context.Events.Count());
         }
@@ -74,9 +45,9 @@ namespace MeetingPlanner.Tests
         public async Task GlobalEventsGetEndpoint_ShouldReturnBothEventsFromDatabase(string url)
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = GetFactory().CreateClient();
 
-            using var scope = _factory.Server.Host.Services.CreateScope();
+            using var scope = GetFactory().Server.Host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             var firstDate = new DateTime(2020, 11, 15);
@@ -112,9 +83,9 @@ namespace MeetingPlanner.Tests
         public async Task GlobalEventsGetEndpoint_ShouldNotReturnEventsFromDatabaseDueToDateQueryParam(string url)
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = GetFactory().CreateClient();
 
-            using var scope = _factory.Server.Host.Services.CreateScope();
+            using var scope = GetFactory().Server.Host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             await context.Events.AddAsync(EventFixtures.SomeEvent().Build());
@@ -137,7 +108,7 @@ namespace MeetingPlanner.Tests
         public async Task EventsPostEndpoint_ShouldCreateGlobalEvent(string url)
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = GetFactory().CreateClient();
             var requestObject = EventFixtures.SomeEventRequest().Build();
             var json = JsonConvert.SerializeObject(requestObject);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -154,7 +125,75 @@ namespace MeetingPlanner.Tests
             Assert.Equal(responseObject.Title, requestObject.Title);
             Assert.Empty(responseObject.Notifications);
 
-            using var scope = _factory.Server.Host.Services.CreateScope();
+            using var scope = GetFactory().Server.Host.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            Assert.Equal(1, context.Events.Count());
+        }
+
+        [Theory]
+        [InlineData("/api/events/global")]
+        public async Task GlobalEventsGetEndpoint_ShouldReturnExceptionDueToNoDateQueryParam(string url)
+        {
+            // Arrange
+            var client = GetFactory().CreateClient();
+
+            // Act
+            var response = await client.GetAsync(url);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseBody = JsonConvert.DeserializeObject<ErrorDetails>(responseContent);
+
+            // Assert
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(500, responseBody.StatusCode);
+            Assert.Equal(
+                "Pobranie spotkañ jest mo¿liwe tylko w przypadku podania w³aœciwego formatu daty w parametrze ¿¹dania!",
+                responseBody.Message);
+        }
+
+        [Theory]
+        [InlineData("/api/events?date=2020-11-03")]
+        public async Task PrivateEventsGetEndpoint_ShouldReturnSuccessAndCorrectContentType(string url)
+        {
+            // Arrange
+            var client = GetFactory(true).CreateClient();
+
+            // Act
+            var response = await client.GetAsync(url);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+
+            using var scope = GetFactory().Server.Host.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            Assert.Equal(0, context.Events.Count());
+        }
+
+        [Theory]
+        [InlineData("/api/events")]
+        public async Task PrivateEventsPostEndpoint_ShouldCreatePersonalEvent(string url)
+        {
+            // Arrange
+            var client = GetFactory(false, true).CreateClient();
+            var requestObject = EventFixtures.SomeEventRequest().Global(false).Build();
+            var json = JsonConvert.SerializeObject(requestObject);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync(url, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<EventResponse>(responseContent);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+            Assert.NotEqual(responseObject.Id, Guid.Empty);
+            Assert.False(responseObject.Global);
+            Assert.Equal(responseObject.Title, requestObject.Title);
+            Assert.Empty(responseObject.Notifications);
+
+            using var scope = GetFactory().Server.Host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             Assert.Equal(1, context.Events.Count());
         }
